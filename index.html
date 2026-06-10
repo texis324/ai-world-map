@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIの世界地図 — 2026.06</title>
+<style>
+body{margin:0;background:#0a0f1a;color:#e6ebf5;font-family:"Segoe UI","Hiragino Sans",Meiryo,sans-serif;}
+.wrap{max-width:780px;margin:0 auto;padding:24px 16px 60px;}
+header h1{font-size:20px;font-weight:600;margin:0 0 4px;}
+header p{font-size:13px;color:#93a3c4;margin:0 0 18px;}
+svg{display:block;font-family:inherit;}
+.node{cursor:pointer}
+.node:hover .coast{stroke-width:2.2}
+.sel .coast{stroke-width:2.8}
+@keyframes pl{0%,100%{opacity:1}50%{opacity:.3}}
+.pulse{animation:pl 1.6s ease-in-out infinite}
+@keyframes dm{to{stroke-dashoffset:-200}}
+.dash{animation:dm 18s linear infinite}
+#chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
+#chips button{display:flex;align-items:center;gap:6px;font-size:12px;padding:5px 10px;background:#131c2e;color:#cdd8ee;border:1px solid #2a3a55;border-radius:8px;cursor:pointer;font-family:inherit;}
+#chips button:hover{background:#1a2640;}
+#chips button.on{font-weight:600;}
+.dot{width:8px;height:8px;border-radius:50%;}
+#panel{border:1px solid #2a3a55;background:#111a2c;border-radius:12px;padding:18px 20px;}
+#panel p{font-size:14px;line-height:1.75;}
+#tabs{display:flex;gap:8px;margin:0 0 14px;}
+#tabs button{font-size:13px;padding:6px 14px;background:#131c2e;color:#cdd8ee;border:1px solid #2a3a55;border-radius:8px;cursor:pointer;font-family:inherit;}
+#tabs button.on{border-color:#f0d27a;color:#fff;font-weight:600;}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0;}
+.chiprow .cap{font-size:11px;color:#5f7396;width:58px;flex:none;}
+#chips2 button,#chips3 button{display:flex;align-items:center;gap:6px;font-size:12px;padding:5px 10px;background:#131c2e;color:#cdd8ee;border:1px solid #2a3a55;border-radius:8px;cursor:pointer;font-family:inherit;}
+#chips2 button:hover,#chips3 button:hover{background:#1a2640;}
+#chips2 button.on,#chips3 button.on{font-weight:600;}
+#panel2,#panel3{border:1px solid #2a3a55;background:#111a2c;border-radius:12px;padding:18px 20px;}
+#panel2 p,#panel3 p{font-size:14px;line-height:1.75;}
+button{touch-action:manipulation;}
+.mapscroll{border-radius:12px;}
+.swipehint{display:none;font-size:11px;color:#5f7396;margin:6px 2px 0;}
+@media (max-width:700px){
+.wrap{padding:16px 10px 48px;}
+header h1{font-size:18px;}
+.mapscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.mapscroll svg{min-width:680px;}
+.swipehint{display:block;}
+#tabs{flex-wrap:wrap;}
+#tabs button{font-size:13px;padding:8px 12px;}
+#chips button,#chips2 button,#chips3 button{font-size:13px;padding:8px 12px;}
+#panel,#panel2,#panel3{padding:14px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>AIの世界地図</h1>
+<p>2026.06 — 大陸・島・ボタンをクリックすると解説が出る。</p>
+</header>
+<div id="tabs">
+<button data-view="map" class="on">AI世界地図</button>
+<button data-view="ideal">理想の使い方 航海図</button>
+<button data-view="beyond">水平線の彼方</button>
+</div>
+<div id="view-map">
+<div class="mapscroll">
+<svg id="aimap" width="100%" viewBox="0 0 680 560" role="img" aria-label="AIの世界地図">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="0" y="0" width="680" height="560" rx="12" fill="#0d1726"/>
+<g stroke="#142238" stroke-width="0.5">
+<line x1="113" y1="10" x2="113" y2="550"/><line x1="226" y1="10" x2="226" y2="550"/><line x1="339" y1="10" x2="339" y2="550"/><line x1="452" y1="10" x2="452" y2="550"/><line x1="565" y1="10" x2="565" y2="550"/>
+<line x1="10" y1="93" x2="670" y2="93"/><line x1="10" y1="186" x2="670" y2="186"/><line x1="10" y1="279" x2="670" y2="279"/><line x1="10" y1="372" x2="670" y2="372"/><line x1="10" y1="465" x2="670" y2="465"/>
+</g>
+<rect x="42" y="26" width="158" height="26" rx="4" fill="none" stroke="#8b93b8" stroke-width="0.8"/>
+<text x="121" y="43" text-anchor="middle" font-size="12" fill="#dce4f5">AI世界図 — 2026.06</text>
+<text x="560" y="44" text-anchor="middle" font-size="12" fill="#3a567a">計算資源の海</text>
+<text x="215" y="392" text-anchor="middle" font-size="11" fill="#3a567a">データ海流</text>
+<path d="M196,404 C212,411 228,411 244,404" fill="none" stroke="#3a567a" stroke-width="0.8" marker-end="url(#arrow)"/>
+<path d="M200,418 C214,424 228,424 242,418" fill="none" stroke="#3a567a" stroke-width="0.8" marker-end="url(#arrow)"/>
+<g class="node" data-region="oldworld">
+<path class="coast" d="M55,95 C60,72 95,58 125,66 C155,74 164,98 152,120 C160,140 142,165 112,170 C84,176 56,160 50,135 C44,115 48,108 55,95 Z" fill="#262c3d" stroke="#8b93b8" stroke-width="1"/>
+<rect x="88" y="102" width="5" height="14" fill="#8b93b8"/><rect x="98" y="98" width="5" height="18" fill="#8b93b8"/><rect x="108" y="104" width="5" height="12" fill="#8b93b8"/>
+<circle cx="70" cy="122" r="1.5" fill="#c9cfe8"/><circle cx="128" cy="146" r="1.5" fill="#c9cfe8"/><circle cx="136" cy="90" r="1.5" fill="#c9cfe8"/>
+<text x="103" y="158" text-anchor="middle" font-size="12" fill="#c9cfe8">旧世界の遺跡</text>
+</g>
+<g class="node" data-region="agi">
+<path class="coast" d="M310,46 C350,28 420,30 460,52 C500,74 512,108 490,132 C462,158 382,162 342,148 C302,134 286,108 293,80 C297,62 300,55 310,46 Z" fill="#272e4a" stroke="#aab8ea" stroke-width="1"/>
+<path d="M316,128 L338,98 L362,128 Z" fill="#2c3454" stroke="#aab8ea" stroke-width="0.6"/>
+<path d="M430,128 L458,92 L482,128 Z" fill="#2c3454" stroke="#aab8ea" stroke-width="0.6"/>
+<path d="M352,128 L398,58 L444,128 Z" fill="#323a5c" stroke="#aab8ea" stroke-width="0.8"/>
+<path d="M384,80 L398,58 L413,82 L404,76 L396,86 L390,76 Z" fill="#e8ecf8"/>
+<text x="398" y="48" text-anchor="middle" font-size="13" fill="#aab8ea">?</text>
+<text x="398" y="147" text-anchor="middle" font-size="13" fill="#dce4f5">AGI未踏峰</text>
+</g>
+<g class="node" data-region="alignment">
+<ellipse class="coast" cx="390" cy="174" rx="102" ry="23" fill="#7fd4f0" fill-opacity="0.06" stroke="#7fd4f0" stroke-width="0.8" stroke-dasharray="5 4"/>
+<ellipse cx="470" cy="193" rx="10" ry="3" fill="#262c3d"/>
+<path d="M470,178 L432,170 L432,186 Z" fill="#f0d27a" fill-opacity="0.15"/>
+<path d="M470,178 L508,172 L508,188 Z" fill="#f0d27a" fill-opacity="0.15"/>
+<rect x="467" y="176" width="7" height="16" fill="#e8ecf8"/>
+<path d="M465,176 L476,176 L470,168 Z" fill="#f0d27a"/>
+<text x="345" y="191" text-anchor="middle" font-size="11" fill="#7fd4f0">アライメント海峡</text>
+</g>
+<g class="node" data-region="llm">
+<path class="coast" d="M212,252 C202,226 232,202 272,199 C312,196 332,206 372,201 C412,196 452,199 482,211 C522,223 556,242 558,272 C561,302 542,332 506,346 C470,360 432,356 396,363 C360,370 322,373 286,363 C251,353 226,346 213,322 C201,299 206,274 212,252 Z" fill="#0f2c3a" stroke="#39c5e0" stroke-width="1.2"/>
+<rect x="279" y="218" width="14" height="3" fill="#39c5e0"/><rect x="281" y="221" width="3" height="8" fill="#39c5e0"/><rect x="288" y="221" width="3" height="8" fill="#39c5e0"/>
+<path d="M322,260 L333,242 L344,260 Z" fill="#1a4456" stroke="#39c5e0" stroke-width="0.6"/><circle cx="333" cy="241" r="2.5" fill="#ff6b5e"/>
+<path d="M428,236 L441,220 L454,236 Z" fill="#143a4c" stroke="#39c5e0" stroke-width="0.6"/>
+<path d="M448,236 L462,214 L476,236 Z" fill="#143a4c" stroke="#39c5e0" stroke-width="0.6"/>
+<path d="M470,236 L486,218 L500,236 Z" fill="#143a4c" stroke="#39c5e0" stroke-width="0.6"/>
+<circle cx="348" cy="240" r="2.5" fill="#9be8f7"/><text x="356" y="244" font-size="11" fill="#bfeaf5">OpenAI</text>
+<circle cx="392" cy="268" r="2.5" fill="#9be8f7"/><text x="400" y="272" font-size="11" fill="#bfeaf5">Anthropic</text>
+<path d="M388,256 L390,261 L395,263 L390,265 L388,270 L386,265 L381,263 L386,261 Z" fill="#ffd76b"/>
+<circle cx="272" cy="290" r="2.5" fill="#9be8f7"/><text x="280" y="294" font-size="11" fill="#bfeaf5">DeepMind</text>
+<circle cx="236" cy="324" r="2.5" fill="#9be8f7"/><text x="244" y="328" font-size="11" fill="#bfeaf5">Meta</text>
+<circle cx="306" cy="338" r="2.5" fill="#9be8f7"/><text x="314" y="342" font-size="11" fill="#bfeaf5">Mistral</text>
+<circle cx="428" cy="338" r="2.5" fill="#9be8f7"/><text x="436" y="342" font-size="11" fill="#bfeaf5">xAI</text>
+<circle cx="492" cy="302" r="2.5" fill="#9be8f7"/><text x="500" y="306" font-size="11" fill="#bfeaf5">DeepSeek</text>
+<circle cx="512" cy="262" r="2.5" fill="#9be8f7"/><text x="520" y="266" font-size="11" fill="#bfeaf5">Qwen</text>
+<text x="385" y="312" text-anchor="middle" font-size="14" font-weight="500" fill="#aeeaf8">言語モデル大陸</text>
+</g>
+<g class="node" data-region="robotics">
+<path class="coast" d="M588,98 C622,86 656,98 666,128 C676,164 668,200 661,240 C653,282 632,307 602,302 C577,297 563,272 567,237 C571,207 561,172 567,142 C571,118 574,106 588,98 Z" fill="#33230f" stroke="#e8923a" stroke-width="1"/>
+<rect x="600" y="150" width="26" height="14" fill="#4a3318" stroke="#e8923a" stroke-width="0.5"/><rect x="604" y="140" width="5" height="10" fill="#4a3318" stroke="#e8923a" stroke-width="0.5"/>
+<circle cx="607" cy="134" r="1.5" fill="#8b93b8"/><circle cx="610" cy="128" r="1.5" fill="#8b93b8"/>
+<circle cx="635" cy="200" r="7" fill="none" stroke="#e8923a" stroke-width="1.5"/><circle cx="635" cy="200" r="2" fill="#e8923a"/>
+<rect x="600" y="233" width="12" height="10" rx="2" fill="none" stroke="#e8923a" stroke-width="1"/><line x1="606" y1="233" x2="606" y2="228" stroke="#e8923a" stroke-width="1"/><circle cx="606" cy="227" r="1.2" fill="#e8923a"/>
+<text x="616" y="268" text-anchor="middle" font-size="12" fill="#f5c98e">ロボティクス<tspan x="616" dy="14">工業地帯</tspan></text>
+</g>
+<g class="node" data-region="sci">
+<path class="coast" d="M512,352 C538,344 568,354 586,374 C604,394 616,424 604,449 C592,474 562,482 537,472 C512,462 500,438 506,416 C512,396 502,372 512,352 Z" fill="#11301c" stroke="#4ec77a" stroke-width="1"/>
+<path d="M560,392 L560,400 L552,414 L570,414 L562,400 L562,392 Z" fill="none" stroke="#4ec77a" stroke-width="1.2"/><rect x="557" y="389" width="8" height="3" fill="#4ec77a"/>
+<circle cx="545" cy="440" r="2" fill="#4ec77a"/>
+<ellipse cx="545" cy="440" rx="9" ry="3.5" fill="none" stroke="#4ec77a" stroke-width="0.8"/>
+<ellipse cx="545" cy="440" rx="9" ry="3.5" fill="none" stroke="#4ec77a" stroke-width="0.8" transform="rotate(60 545 440)"/>
+<ellipse cx="545" cy="440" rx="9" ry="3.5" fill="none" stroke="#4ec77a" stroke-width="0.8" transform="rotate(120 545 440)"/>
+<text x="556" y="466" text-anchor="middle" font-size="12" fill="#9fe0b8">科学AI半島</text>
+</g>
+<g class="node" data-region="rl">
+<path class="coast" d="M272,432 C292,406 342,399 382,406 C422,413 452,427 457,457 C462,487 437,512 397,520 C357,528 307,524 282,507 C257,490 254,472 260,454 C264,442 266,440 272,432 Z" fill="#33290f" stroke="#d4b13e" stroke-width="1"/>
+<circle cx="300" cy="442" r="1.2" fill="#6b5a23"/><circle cx="336" cy="502" r="1.2" fill="#6b5a23"/><circle cx="424" cy="472" r="1.2" fill="#6b5a23"/><circle cx="288" cy="478" r="1.2" fill="#6b5a23"/>
+<rect x="302" y="455" width="8" height="11" rx="3" fill="#6b5a23"/><rect x="314" y="458" width="8" height="11" rx="3" fill="#6b5a23"/>
+<path d="M402,448 L402,432 M418,448 L418,432 M398,434 L422,434 M400,440 L420,440" stroke="#d4b13e" stroke-width="2" fill="none"/>
+<text x="358" y="487" text-anchor="middle" font-size="13" fill="#ecd584">強化学習の荒野</text>
+</g>
+<g class="node" data-region="genart">
+<path class="coast" d="M82,420 C92,402 122,398 137,412 C152,426 147,448 127,456 C107,464 84,452 80,438 C78,430 79,425 82,420 Z" fill="#341d2e" stroke="#e06ab0" stroke-width="1"/>
+<path class="coast" d="M162,448 C170,436 192,434 202,446 C212,458 202,474 186,477 C170,480 156,462 162,448 Z" fill="#341d2e" stroke="#e06ab0" stroke-width="1"/>
+<path class="coast" d="M102,490 C110,478 132,476 144,486 C156,496 150,513 132,517 C114,521 97,506 102,490 Z" fill="#341d2e" stroke="#e06ab0" stroke-width="1"/>
+<circle cx="110" cy="428" r="6.5" fill="none" stroke="#e06ab0" stroke-width="1.2"/><circle cx="107" cy="425" r="1" fill="#e06ab0"/><circle cx="113" cy="425" r="1" fill="#e06ab0"/><circle cx="110" cy="431" r="1" fill="#e06ab0"/>
+<circle cx="180" cy="460" r="3" fill="#e06ab0"/><path d="M183,460 L183,446 L189,444" stroke="#e06ab0" stroke-width="1.5" fill="none"/>
+<rect x="116" y="494" width="16" height="10" rx="1" fill="none" stroke="#e06ab0" stroke-width="1"/><line x1="121" y1="494" x2="121" y2="504" stroke="#e06ab0" stroke-width="0.8"/><line x1="127" y1="494" x2="127" y2="504" stroke="#e06ab0" stroke-width="0.8"/>
+<text x="140" y="540" text-anchor="middle" font-size="12" fill="#f3b8d9">生成芸術諸島</text>
+</g>
+<path class="dash" d="M150,162 C190,190 205,232 245,243 C300,258 345,252 372,228 C390,212 396,196 400,176 C404,158 392,134 352,116" fill="none" stroke="#f0d27a" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arrow)"/>
+<path d="M183,200 L183,188 L191,198 Z" fill="#dce4f5"/><path d="M178,201 L196,201 L192,206 L181,206 Z" fill="#8b93b8"/>
+<text x="172" y="222" text-anchor="middle" font-size="11" fill="#bda968">歴史航路</text>
+<circle class="pulse" cx="345" cy="112" r="4" fill="#ff6b5e"/>
+<text x="335" y="106" text-anchor="end" font-size="11" fill="#ffd9d4">現在地 2026.06</text>
+</svg>
+</div>
+<p class="swipehint">地図は横スワイプ／ピンチで動かせる</p>
+<div id="chips">
+<button data-region="oldworld"><span class="dot" style="background:#8b93b8;"></span>旧世界の遺跡</button>
+<button data-region="rl"><span class="dot" style="background:#d4b13e;"></span>強化学習の荒野</button>
+<button data-region="llm"><span class="dot" style="background:#39c5e0;"></span>言語モデル大陸</button>
+<button data-region="genart"><span class="dot" style="background:#e06ab0;"></span>生成芸術諸島</button>
+<button data-region="robotics"><span class="dot" style="background:#e8923a;"></span>ロボティクス工業地帯</button>
+<button data-region="sci"><span class="dot" style="background:#4ec77a;"></span>科学AI半島</button>
+<button data-region="alignment"><span class="dot" style="background:#7fd4f0;"></span>アライメント海峡</button>
+<button data-region="agi"><span class="dot" style="background:#aab8ea;"></span>AGI未踏峰</button>
+</div>
+<div id="panel">
+<p style="margin:0;">地図上の大陸・島・海峡、または上のボタンをクリックすると、その地域の歴史とランドマークが表示される。8地域・全56ランドマーク。金色の点線は1956年から続く<span style="color:#93a3c4;">歴史航路</span>、赤く明滅する点が現在地（2026年6月、AGI未踏峰の五合目あたり）。</p>
+</div>
+</div>
+<div id="view-ideal" style="display:none;">
+<div class="mapscroll">
+<svg id="idealmap" width="100%" viewBox="0 0 680 560" role="img" aria-label="理想のAI活用 航海図">
+<defs><marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="0" y="0" width="680" height="560" rx="12" fill="#0d1726"/>
+<g stroke="#142238" stroke-width="0.5">
+<line x1="113" y1="10" x2="113" y2="550"/><line x1="226" y1="10" x2="226" y2="550"/><line x1="339" y1="10" x2="339" y2="550"/><line x1="452" y1="10" x2="452" y2="550"/><line x1="565" y1="10" x2="565" y2="550"/>
+<line x1="10" y1="93" x2="670" y2="93"/><line x1="10" y1="186" x2="670" y2="186"/><line x1="10" y1="279" x2="670" y2="279"/><line x1="10" y1="372" x2="670" y2="372"/><line x1="10" y1="465" x2="670" y2="465"/>
+</g>
+<rect x="250" y="26" width="180" height="26" rx="4" fill="none" stroke="#8b93b8" stroke-width="0.8"/>
+<text x="340" y="43" text-anchor="middle" font-size="12" fill="#dce4f5">理想のAI活用 航海図</text>
+<text x="205" y="68" text-anchor="middle" font-size="12" fill="#3a567a">未知の海</text>
+<g class="node" data-item="compass">
+<circle cx="120" cy="150" r="62" fill="transparent"/>
+<circle cx="120" cy="140" r="50" fill="none" stroke="#5eead4" stroke-width="0.8" class="coast"/>
+<circle cx="120" cy="140" r="42" fill="none" stroke="#2a4a45" stroke-width="0.5"/>
+<path d="M120,94 L127,133 L166,140 L127,147 L120,186 L113,147 L74,140 L113,133 Z" fill="#123530" stroke="#5eead4" stroke-width="0.8"/>
+<path d="M120,112 L138,122 L148,140 L138,158 L120,168 L102,158 L92,140 L102,122 Z" fill="none" stroke="#2a4a45" stroke-width="0.5"/>
+<circle cx="120" cy="140" r="3" fill="#5eead4"/>
+<text x="120" y="86" text-anchor="middle" font-size="11" fill="#5eead4">N</text>
+<text x="120" y="212" text-anchor="middle" font-size="12" fill="#9ef0de">航海術の羅針盤</text>
+</g>
+<g class="node" data-item="horizon">
+<rect x="398" y="26" width="264" height="84" fill="transparent"/>
+<line x1="400" y1="78" x2="660" y2="78" stroke="#a78bfa" stroke-width="1" stroke-dasharray="6 4" class="coast"/>
+<path d="M544,78 A26,26 0 0 1 596,78 Z" fill="#3c3470" stroke="#a78bfa" stroke-width="1"/>
+<line x1="570" y1="40" x2="570" y2="30" stroke="#a78bfa" stroke-width="1"/>
+<line x1="548" y1="48" x2="541" y2="40" stroke="#a78bfa" stroke-width="1"/>
+<line x1="592" y1="48" x2="599" y2="40" stroke="#a78bfa" stroke-width="1"/>
+<text x="500" y="102" text-anchor="middle" font-size="12" fill="#c4b5fd">共進化の水平線</text>
+</g>
+<path class="dash" d="M95,485 C150,475 185,455 230,440 C290,420 310,400 350,370 C400,332 430,305 465,275 C505,240 525,215 545,185 C558,162 565,128 570,100" fill="none" stroke="#f0d27a" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arrow2)"/>
+<g class="node" data-item="lv1">
+<circle cx="95" cy="485" r="24" fill="transparent"/>
+<line x1="68" y1="494" x2="92" y2="494" stroke="#8b93b8" stroke-width="2"/>
+<line x1="74" y1="500" x2="88" y2="500" stroke="#8b93b8" stroke-width="2"/>
+<circle class="coast" cx="95" cy="485" r="8" fill="#1d2a42" stroke="#f0d27a" stroke-width="1"/>
+<text x="95" y="489" text-anchor="middle" font-size="11" fill="#f0d27a">1</text>
+<text x="110" y="476" font-size="12" fill="#ecd584">質問の港</text>
+</g>
+<g class="node" data-item="lv2">
+<circle cx="230" cy="440" r="24" fill="transparent"/>
+<circle class="coast" cx="230" cy="440" r="8" fill="#1d2a42" stroke="#f0d27a" stroke-width="1"/>
+<text x="230" y="444" text-anchor="middle" font-size="11" fill="#f0d27a">2</text>
+<text x="245" y="436" font-size="12" fill="#ecd584">壁打ちの瀬戸</text>
+</g>
+<g class="node" data-item="lv3">
+<circle cx="350" cy="370" r="24" fill="transparent"/>
+<circle class="coast" cx="350" cy="370" r="8" fill="#1d2a42" stroke="#f0d27a" stroke-width="1"/>
+<text x="350" y="374" text-anchor="middle" font-size="11" fill="#f0d27a">3</text>
+<text x="365" y="366" font-size="12" fill="#ecd584">委任の沖</text>
+</g>
+<g class="node" data-item="lv4">
+<circle cx="465" cy="275" r="24" fill="transparent"/>
+<circle class="coast" cx="465" cy="275" r="8" fill="#1d2a42" stroke="#f0d27a" stroke-width="1"/>
+<text x="465" y="279" text-anchor="middle" font-size="11" fill="#f0d27a">4</text>
+<text x="480" y="271" font-size="12" fill="#ecd584">並走の海原</text>
+</g>
+<g class="node" data-item="lv5">
+<circle cx="545" cy="185" r="24" fill="transparent"/>
+<circle class="coast" cx="545" cy="185" r="8" fill="#1d2a42" stroke="#f0d27a" stroke-width="1"/>
+<text x="545" y="189" text-anchor="middle" font-size="11" fill="#f0d27a">5</text>
+<text x="533" y="180" text-anchor="end" font-size="12" fill="#ecd584">艦隊の大洋</text>
+<path d="M590,196 L590,186 L596,194 Z" fill="#ecd584"/><path d="M602,200 L602,192 L607,198 Z" fill="#ecd584"/><path d="M612,192 L612,184 L617,190 Z" fill="#ecd584"/>
+</g>
+<g class="node" data-item="hz1">
+<circle cx="190" cy="362" r="28" fill="transparent"/>
+<path d="M171,351 L179,359 M179,351 L171,359" stroke="#ff7a6b" stroke-width="1.5"/>
+<path d="M186,344 L194,352 M194,344 L186,352" stroke="#ff7a6b" stroke-width="1.5"/>
+<path d="M201,354 L209,362 M209,354 L201,362" stroke="#ff7a6b" stroke-width="1.5"/>
+<text x="190" y="385" text-anchor="middle" font-size="11" fill="#ffb4a8">幻覚の暗礁</text>
+</g>
+<g class="node" data-item="hz2">
+<circle cx="318" cy="484" r="28" fill="transparent"/>
+<ellipse cx="305" cy="472" rx="18" ry="5" fill="#8b93b8" fill-opacity="0.25"/>
+<ellipse cx="328" cy="480" rx="18" ry="5" fill="#8b93b8" fill-opacity="0.25"/>
+<ellipse cx="310" cy="488" rx="16" ry="5" fill="#8b93b8" fill-opacity="0.25"/>
+<text x="318" y="507" text-anchor="middle" font-size="11" fill="#ffb4a8">丸投げの霧</text>
+</g>
+<g class="node" data-item="hz3">
+<circle cx="430" cy="428" r="28" fill="transparent"/>
+<path d="M442,420 a12,12 0 1 1 -24,0 a9,9 0 1 1 18,0 a6,6 0 1 1 -12,0 a3,3 0 1 1 6,0" fill="none" stroke="#ff7a6b" stroke-width="1.2"/>
+<text x="430" y="448" text-anchor="middle" font-size="11" fill="#ffb4a8">依存の渦</text>
+</g>
+<g class="node" data-item="hz4">
+<circle cx="282" cy="264" r="28" fill="transparent"/>
+<path d="M270,266 L278,250 L288,258 L292,266 Z" fill="#5a2e28" stroke="#ff7a6b" stroke-width="0.6"/>
+<circle cx="294" cy="246" r="2.5" fill="#ff7a6b"/><path d="M296.5,246 L296.5,234 L302,232" stroke="#ff7a6b" stroke-width="1.2" fill="none"/>
+<text x="280" y="288" text-anchor="middle" font-size="11" fill="#ffb4a8">おべっかの岩礁</text>
+</g>
+<g class="node" data-item="hz5">
+<circle cx="560" cy="334" r="28" fill="transparent"/>
+<line x1="548" y1="324" x2="572" y2="324" stroke="#ff7a6b" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+<line x1="544" y1="330" x2="576" y2="330" stroke="#ff7a6b" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+<line x1="548" y1="336" x2="572" y2="336" stroke="#ff7a6b" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+<text x="560" y="358" text-anchor="middle" font-size="11" fill="#ffb4a8">退化の凪</text>
+</g>
+<circle class="pulse" cx="505" cy="235" r="4" fill="#ff6b5e"/>
+<text x="516" y="231" font-size="11" fill="#ffd9d4">現在地 2026.06</text>
+</svg>
+</div>
+<p class="swipehint">海図は横スワイプ／ピンチで動かせる</p>
+<div id="chips2">
+<div class="chiprow"><span class="cap">航路</span>
+<button data-item="lv1"><span class="dot" style="background:#f0d27a;"></span>質問の港</button>
+<button data-item="lv2"><span class="dot" style="background:#f0d27a;"></span>壁打ちの瀬戸</button>
+<button data-item="lv3"><span class="dot" style="background:#f0d27a;"></span>委任の沖</button>
+<button data-item="lv4"><span class="dot" style="background:#f0d27a;"></span>並走の海原</button>
+<button data-item="lv5"><span class="dot" style="background:#f0d27a;"></span>艦隊の大洋</button>
+<button data-item="horizon"><span class="dot" style="background:#a78bfa;"></span>共進化の水平線</button>
+</div>
+<div class="chiprow"><span class="cap">危険海域</span>
+<button data-item="hz1"><span class="dot" style="background:#ff7a6b;"></span>幻覚の暗礁</button>
+<button data-item="hz2"><span class="dot" style="background:#ff7a6b;"></span>丸投げの霧</button>
+<button data-item="hz3"><span class="dot" style="background:#ff7a6b;"></span>依存の渦</button>
+<button data-item="hz4"><span class="dot" style="background:#ff7a6b;"></span>おべっかの岩礁</button>
+<button data-item="hz5"><span class="dot" style="background:#ff7a6b;"></span>退化の凪</button>
+</div>
+<div class="chiprow"><span class="cap">羅針盤</span>
+<button data-item="compass"><span class="dot" style="background:#5eead4;"></span>羅針盤(全体)</button>
+<button data-item="p1"><span class="dot" style="background:#5eead4;"></span>舵は渡さない</button>
+<button data-item="p2"><span class="dot" style="background:#5eead4;"></span>検証できる形で任せる</button>
+<button data-item="p3"><span class="dot" style="background:#5eead4;"></span>事実と推測を分けさせる</button>
+<button data-item="p4"><span class="dot" style="background:#5eead4;"></span>文脈を積む</button>
+<button data-item="p5"><span class="dot" style="background:#5eead4;"></span>失敗が安い順に任せる</button>
+<button data-item="p6"><span class="dot" style="background:#5eead4;"></span>面白さも成果のうち</button>
+</div>
+</div>
+<div id="panel2">
+<p style="margin:0;">AIの使い方の成熟度を、港から大洋へ進む航路として描いた海図。金色の航路の5つの番号、紫の水平線、珊瑚色の危険海域、左上の羅針盤——どれもクリック（または上のボタン）で解説が出る。赤く明滅する点は現在地の目安。</p>
+</div>
+</div>
+<div id="view-beyond" style="display:none;">
+<div class="mapscroll">
+<svg id="beyondmap" width="100%" viewBox="0 0 680 560" role="img" aria-label="水平線の彼方 — ASI以後の海域">
+<defs><marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="0" y="0" width="680" height="560" rx="12" fill="#080c18"/>
+<g fill="#aab8ea">
+<circle cx="60" cy="90" r="1" opacity="0.6"/><circle cx="95" cy="210" r="1.2" opacity="0.5"/><circle cx="250" cy="120" r="1" opacity="0.7"/><circle cx="300" cy="80" r="1.4" opacity="0.5"/><circle cx="420" cy="100" r="1" opacity="0.6"/><circle cx="450" cy="200" r="1.2" opacity="0.5"/><circle cx="610" cy="90" r="1" opacity="0.7"/><circle cx="640" cy="200" r="1.2" opacity="0.5"/><circle cx="620" cy="420" r="1" opacity="0.6"/><circle cx="450" cy="380" r="1.2" opacity="0.5"/><circle cx="280" cy="390" r="1" opacity="0.6"/><circle cx="220" cy="440" r="1" opacity="0.5"/><circle cx="500" cy="420" r="1.2" opacity="0.6"/><circle cx="180" cy="260" r="1" opacity="0.5"/><circle cx="80" cy="300" r="1.2" opacity="0.6"/><circle cx="390" cy="180" r="1" opacity="0.5"/><circle cx="260" cy="220" r="1" opacity="0.6"/><circle cx="560" cy="230" r="1" opacity="0.5"/><circle cx="120" cy="120" r="1" opacity="0.5"/><circle cx="40" cy="380" r="1" opacity="0.6"/>
+</g>
+<rect x="220" y="26" width="240" height="26" rx="4" fill="none" stroke="#8b93b8" stroke-width="0.8"/>
+<text x="340" y="43" text-anchor="middle" font-size="12" fill="#dce4f5">水平線の彼方 — ASI以後の海域</text>
+<text x="340" y="66" text-anchor="middle" font-size="11" fill="#5f7396">ここから先は海図ではなく星図——全編【推測】の海域</text>
+<line x1="20" y1="505" x2="660" y2="505" stroke="#a78bfa" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M544,505 A26,26 0 0 1 596,505 Z" fill="#3c3470" stroke="#a78bfa" stroke-width="1" opacity="0.5"/>
+<text x="90" y="527" font-size="11" fill="#5f7396">ここまでが海図</text>
+<text x="570" y="527" text-anchor="middle" font-size="11" fill="#5f7396">水平線(通過済)</text>
+<path class="dash" d="M350,505 C355,440 330,360 340,278" fill="none" stroke="#f0d27a" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arrow3)"/>
+<line x1="328" y1="240" x2="205" y2="178" stroke="#4ec77a" stroke-width="0.8" stroke-dasharray="2 5" opacity="0.7"/>
+<line x1="358" y1="255" x2="520" y2="295" stroke="#ff7a6b" stroke-width="0.8" stroke-dasharray="2 5" opacity="0.7"/>
+<line x1="352" y1="238" x2="488" y2="150" stroke="#e06ab0" stroke-width="0.8" stroke-dasharray="2 5" opacity="0.7"/>
+<line x1="322" y1="258" x2="195" y2="325" stroke="#7fd4f0" stroke-width="0.8" stroke-dasharray="2 5" opacity="0.7"/>
+<g class="node" data-item="asi">
+<rect x="295" y="215" width="90" height="95" fill="transparent"/>
+<circle class="pulse" cx="340" cy="250" r="22" fill="none" stroke="#f0d27a" stroke-width="0.8"/>
+<circle cx="340" cy="250" r="14" fill="none" stroke="#f0d27a" stroke-width="0.5" opacity="0.6"/>
+<path d="M340,232 L344,246 L358,250 L344,254 L340,268 L336,254 L322,250 L336,246 Z" fill="#f0d27a"/>
+<text x="340" y="300" text-anchor="middle" font-size="12" fill="#ecd584">特異点の灯</text>
+</g>
+<g class="node" data-item="bright">
+<rect x="138" y="120" width="96" height="82" fill="transparent"/>
+<circle cx="160" cy="150" r="2" fill="#4ec77a"/><circle cx="185" cy="138" r="2.5" fill="#4ec77a"/><circle cx="210" cy="150" r="2" fill="#4ec77a"/><circle cx="172" cy="166" r="2" fill="#4ec77a"/><circle cx="198" cy="168" r="2.5" fill="#4ec77a"/>
+<line x1="160" y1="150" x2="185" y2="138" stroke="#4ec77a" stroke-width="0.5" opacity="0.6"/><line x1="185" y1="138" x2="210" y2="150" stroke="#4ec77a" stroke-width="0.5" opacity="0.6"/><line x1="160" y1="150" x2="172" y2="166" stroke="#4ec77a" stroke-width="0.5" opacity="0.6"/><line x1="172" y1="166" x2="198" y2="168" stroke="#4ec77a" stroke-width="0.5" opacity="0.6"/><line x1="198" y1="168" x2="210" y2="150" stroke="#4ec77a" stroke-width="0.5" opacity="0.6"/>
+<text x="185" y="195" text-anchor="middle" font-size="12" fill="#9fe0b8">豊穣の群島</text>
+</g>
+<g class="node" data-item="dark">
+<rect x="505" y="256" width="105" height="112" fill="transparent"/>
+<path d="M525,275 C560,268 592,284 602,310 C592,332 555,337 535,317 C521,302 518,284 525,275 Z" fill="#04060c" stroke="#ff7a6b" stroke-width="0.6"/>
+<path d="M545,290 L585,308 M555,310 L575,295" stroke="#ff7a6b" stroke-width="0.4" opacity="0.5"/>
+<text x="562" y="362" text-anchor="middle" font-size="12" fill="#ffb4a8">無光の海溝</text>
+</g>
+<g class="node" data-item="immortal">
+<rect x="478" y="82" width="64" height="98" fill="transparent"/>
+<ellipse cx="510" cy="148" rx="22" ry="6" fill="#1a1426" stroke="#e06ab0" stroke-width="0.6"/>
+<rect x="505" y="110" width="10" height="38" fill="#1a1426" stroke="#e06ab0" stroke-width="0.8"/>
+<rect x="503" y="106" width="14" height="5" fill="#e06ab0"/>
+<circle cx="510" cy="120" r="1" fill="#e06ab0"/><circle cx="510" cy="130" r="1" fill="#e06ab0"/><circle cx="510" cy="140" r="1" fill="#e06ab0"/>
+<text x="510" y="98" text-anchor="middle" font-size="12" fill="#e06ab0">∞</text>
+<text x="510" y="172" text-anchor="middle" font-size="12" fill="#f3b8d9">不死の楼閣</text>
+</g>
+<g class="node" data-item="upload">
+<rect x="128" y="292" width="66" height="88" fill="transparent"/>
+<line x1="150" y1="352" x2="150" y2="312" stroke="#7fd4f0" stroke-width="1.5"/>
+<line x1="172" y1="352" x2="172" y2="312" stroke="#7fd4f0" stroke-width="1.5"/>
+<line x1="142" y1="314" x2="180" y2="314" stroke="#7fd4f0" stroke-width="2"/>
+<line x1="146" y1="322" x2="176" y2="322" stroke="#7fd4f0" stroke-width="1"/>
+<circle cx="150" cy="312" r="1.8" fill="#7fd4f0"/><circle cx="172" cy="312" r="1.8" fill="#7fd4f0"/><circle cx="161" cy="306" r="1.4" fill="#7fd4f0"/>
+<text x="161" y="374" text-anchor="middle" font-size="12" fill="#bfeaf5">乗り換えの門</text>
+</g>
+<g class="node" data-item="human">
+<rect x="325" y="435" width="110" height="72" fill="transparent"/>
+<path d="M350,468 L305,310 L390,310 Z" fill="#f0d27a" fill-opacity="0.06"/>
+<rect x="345" y="475" width="10" height="30" fill="#e8ecf8"/>
+<rect x="343" y="469" width="14" height="6" fill="#f0d27a"/>
+<text x="364" y="489" font-size="11" fill="#c4b5fd">人間性の灯台</text>
+</g>
+<g opacity="0.8">
+<circle cx="85" cy="440" r="4" fill="none" stroke="#39c5e0" stroke-width="0.6"/>
+<circle cx="115" cy="440" r="4" fill="none" stroke="#39c5e0" stroke-width="0.6"/>
+<line x1="85" y1="440" x2="100" y2="428" stroke="#39c5e0" stroke-width="0.5"/>
+<line x1="100" y1="428" x2="115" y2="440" stroke="#39c5e0" stroke-width="0.5"/>
+<line x1="100" y1="428" x2="108" y2="423" stroke="#39c5e0" stroke-width="0.5"/>
+<circle cx="100" cy="428" r="1.2" fill="#39c5e0"/><circle cx="108" cy="423" r="1.2" fill="#39c5e0"/>
+<text x="100" y="460" text-anchor="middle" font-size="11" fill="#3a567a">ライダー座</text>
+</g>
+</svg>
+</div>
+<p class="swipehint">星図は横スワイプ／ピンチで動かせる</p>
+<div id="chips3" style="display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;">
+<button data-item="asi"><span class="dot" style="background:#f0d27a;"></span>特異点の灯</button>
+<button data-item="bright"><span class="dot" style="background:#4ec77a;"></span>豊穣の群島</button>
+<button data-item="dark"><span class="dot" style="background:#ff7a6b;"></span>無光の海溝</button>
+<button data-item="immortal"><span class="dot" style="background:#e06ab0;"></span>不死の楼閣</button>
+<button data-item="upload"><span class="dot" style="background:#7fd4f0;"></span>乗り換えの門</button>
+<button data-item="human"><span class="dot" style="background:#a78bfa;"></span>人間性の灯台</button>
+</div>
+<div id="panel3">
+<p style="margin:0;">水平線を越えた先、ASI（人工超知能）が実現したあとの海域。ここにあるのは海図ではなく星図——観測できた事実は「先行指標」として分けて示すが、海域そのものは全編【推測】だ。中央の特異点の灯から航路は枝分かれする。星をクリック（または上のボタン）で各シナリオの解説が出る。</p>
+</div>
+</div>
+<script>
+const COLORS={llm:"#39c5e0",genart:"#e06ab0",robotics:"#e8923a",rl:"#d4b13e",sci:"#4ec77a",alignment:"#7fd4f0",oldworld:"#8b93b8",agi:"#aab8ea"};
+const DATA={
+"llm":{"regionName":"言語モデル大陸","tagline":"「注意こそすべて」と刻まれし中央大陸","description":"AI世界の中心に鎮座する最大の大陸。2017年の論文『Attention Is All You Need』が地殻そのものを作り変え、以後は「デカくすれば賢くなる」スケーリング則の重力で膨張を続ける。2022年11月のChatGPT大噴火で全人類が観光客と化し、OpenAI・Anthropic・Google DeepMindの三強に、オープン路線のMetaやMistral、xAI、東方のDeepSeek・Qwenまで領土争いに参戦。最近は「考えてから答える」推論モデルの山脈が隆起中で、この地図は毎月描き直しになる。","landmarks":[{"name":"アテンション神殿（Transformer発祥の地）","year":"2017","blurb":"Googleの研究者8人による論文『Attention Is All You Need』が建立した聖地。以後この大陸に建つほぼ全ての建造物が、この神殿の設計図＝Transformerの派生である。"},{"name":"GPT-3の巨人像","year":"2020","blurb":"パラメータ1750億の巨像。「規模こそ正義」というスケーリング則の威力を見せつけ、数例見せるだけでタスクをこなすfew-shot能力で研究者を震撼させた。来たる大噴火の前震。"},{"name":"ChatGPT大噴火口","year":"2022","blurb":"OpenAIが「研究プレビュー」のつもりで公開したら世界規模の噴火に。約2か月で利用者1億人と報じられ、AIは研究室の生き物から人類の日用品になった。大陸史の紀元。"},{"name":"Anthropicの灯台（Claude）","year":"2021","blurb":"元OpenAIのDario Amodei兄妹らが建てた安全重視の研究所。Claudeシリーズの産地。なお、この地図を描いているのも当のClaudeなので、自画像の美化にはご注意を。"},{"name":"Llamaの大放牧場（Meta）","year":"2023","blurb":"Metaが重み公開路線を選んだ放牧地。Llamaの血統からは無数の派生モデルが生まれ、フロンティアが城壁の中だけのものではないと証明した。ライセンスの柵は一応ある。"},{"name":"推論山脈（o1と拡張思考の峰々）","year":"2024","blurb":"OpenAIのo1を皮切りに隆起した新山脈。o3、R1、Claudeの拡張思考など「答える前に長考する」モデルが棲み、思考時間を賢さに変換する錬金術が主流になった。"},{"name":"DeepSeek-R1衝突クレーター","year":"2025","blurb":"2025年1月、中国のDeepSeekが低コストで鍛えた推論モデルR1を公開し市場が激震。NVIDIA株の急落まで巻き込み、「札束の厚さ＝強さ」神話に亀裂を入れた衝突痕。"}],"funFact":"Transformer論文の著者8人は、その後全員が一度はGoogleを退社し、多くが自分のAI企業を興した（うち1人は2024年に出戻り）。神殿の設計者ほど、神殿には残らない。"},
+"genart":{"regionName":"生成芸術諸島","tagline":"呪文ひとつ、絵も歌も湧き出づる海域","description":"2014年、GoodfellowのGAN——生成器と識別器が騙し合いながら腕を上げる仕組み——の噴火でできた群島。2022年、拡散モデルの海流に乗ってDALL-E 2、Midjourney、Stable Diffusionが相次ぎ開港し、「呪文(プロンプト)を唱えれば絵が出る」時代が到来した。以後、動画のSora、Google Veo、音楽のSuno/Udioと島は増殖を続けている。ただしこの海域の浜辺には「その絵柄、誰のもの?」という著作権論争の漂流物が定期的に打ち上がるので、上陸者は注意されたし。","landmarks":[{"name":"GAN双子火山（Goodfellow）","year":"2014","blurb":"生成器と識別器、二つの火口が互いの偽物を見破り合って成長する敵対的生成ネットワーク。Goodfellowが酒場の議論のあと一晩で初実装したという逸話付き、群島最古の活火山。"},{"name":"ベラミー肖像の競売岬（Christie's）","year":"2018","blurb":"GAN製の肖像画『エドモンド・ド・ベラミー』が名門クリスティーズで約43万ドル落札。事前予想の40倍超の値が付き、「AIの絵に大金が動く」ことを世界に知らしめた岬。"},{"name":"DALL-E 2の蜃気楼湾（OpenAI）","year":"2022","blurb":"「アボカドの椅子」で話題をさらった初代に続き、OpenAIが公開した高品質画像生成。拡散モデルで写実もアート風も自在に描き分け、招待制の門前に長い行列ができた湾。"},{"name":"Stable Diffusion自由港","year":"2022","blurb":"Stability AIらがモデルの重みごとオープンソース公開した、無法にして豊穣な港。手元のGPU一枚で誰でも画像生成が回せるようになり、無数の派生モデルと改造文化がここから出航した。"},{"name":"Midjourney州フェア事変の丘","year":"2022","blurb":"米コロラド州フェアのデジタルアート部門でMidjourney製『Théâtre D'opéra Spatial』が優勝し大炎上。「これはアートか、それともズルか」論争の震源地として地図に刻まれた丘。"},{"name":"Sora海峡（OpenAI）","year":"2024","blurb":"テキストから最長1分の動画を生成するモデル。2024年2月のデモ映像が世界を驚かせ、映像業界に「次は俺たちの番か」というざわめきを広げた海峡。対岸にはGoogleのVeo灯台が建つ。"},{"name":"Suno/Udio歌声環礁","year":"2024","blurb":"歌詞とスタイル指定だけで歌入りの完成曲を吐き出す双子の環礁。2024年6月、米レコード業界(RIAA)が両者を著作権侵害で提訴し、音楽生成をめぐる海戦の最前線となった。"}],"funFact":"約43万ドルで落札されたGAN肖像画『ベラミー』、右下の署名は画家の名前ではなくGANの損失関数の数式。サインが数式の絵画はおそらく史上初。"},
+"robotics":{"regionName":"ロボティクス工業地帯","tagline":"鋼の身体に言葉の魂が宿る、槌音の大陸","description":"言葉しか持たなかったAIが身体を得る大陸。Boston Dynamicsの宙返りが観光名所となり、2024〜25年のヒューマノイド投資ブームで地価は高騰中。頭脳側ではRT-2やπ0などのVLAモデルが「言葉→動作」の翻訳を担い、新兵はNVIDIA Isaacの仮想練兵場で何万回も転んでから現実に配属される。一方でWaymoの無人タクシーはすでに街を淡々と走っており、派手なデモ動画と地道な実用の間に深い谷が横たわるのもこの大陸の名物。","landmarks":[{"name":"アトラス曲芸場（Boston Dynamics Atlas）","year":"2017","blurb":"Atlasがバク宙を決め、人類が「ロボットの身体能力」の天井を見上げた聖地。2024年には油圧式が引退し、全電動の新型Atlasへ世代交代した。"},{"name":"オプティマス組立ライン（Tesla Optimus）","year":"2021","blurb":"AI Dayで構想を発表し、翌2022年に実機プロトタイプが登場。Musk曰く「自動車事業より大きくなる」。量産予定は発表のたびに少しずつ動くのが伝統。"},{"name":"フィギュア新興ドック（Figure）","year":"2024","blurb":"OpenAIとの提携と巨額調達でドックが沸いた新興勢。2025年には提携を解消し、自社製VLA「Helix」で頭脳の内製化へ舵を切った。BMW工場でも実証中。"},{"name":"ユニツリー大市場（Unitree）","year":"2024","blurb":"中国発の価格破壊バザール。四足Go2は約1,600ドル、人型G1は約16,000ドルから。「人型ロボは富豪の玩具」という常識を値札で叩き割った。"},{"name":"RT-2の関所（Google DeepMind）","year":"2023","blurb":"ウェブで学んだ言葉の知識をロボットの動作に翻訳するVLAモデルの代表格。「絶滅した動物を拾え」と言われて恐竜フィギュアを掴む芸当で名を馳せた。"},{"name":"π0平原（Physical Intelligence）","year":"2024","blurb":"洗濯物たたみのデモで名を上げたロボット基盤モデルπ0の本拠地。多種多様なロボットのデータを束ねて「ロボット界のGPT」を狙う、投資が流れ込む開拓地。"},{"name":"ウェイモ環状線（Waymo）","year":"2020","blurb":"2009年のGoogle自動運転計画が源流。2020年にフェニックスで運転席無人の商用ライドを一般開放。派手さはないが毎週大量の有料運行を黙々とこなす実用地帯。"}],"funFact":"Tesla Optimusの初お披露目（2021年）でステージで踊ったのは、ロボットスーツを着た人間のダンサー。実機はまだ1台も存在しなかった。"},
+"rl":{"regionName":"強化学習の荒野","tagline":"一度滅びて、王の心臓に転生せし地","description":"報酬を最大化せよ——ただそれだけの掟で動く者たちの古戦場。バックギャモンからAtari、囲碁、StarCraft、Dota 2まで名だたるゲームを次々と征服したが、ゲームの外では燃費が悪すぎて職にあぶれ、「RLは死んだ」と囁かれる冬を迎えた。ところが転生先が大当たり。RLHFやRLVRとしてLLMの調教と推論の心臓部に住み着き、いま地図上で一番熱い土地に返り咲いた。廃墟の地下では今日も報酬信号が脈打っている。","landmarks":[{"name":"始まりの賽・TD-Gammonの礎","year":"1992","blurb":"IBMのテザウロが自己対戦とTD学習だけでバックギャモンAIを世界トップ級に鍛えた最古の伝説。人間側が定石を書き換えさせられた最初の事件でもある。"},{"name":"DQNのアーケード遺跡","year":"2013","blurb":"DeepMindが画面のピクセルとスコアだけでAtariのゲーム群を攻略（2015年にNature掲載）。ブロック崩しのトンネル掘りを自力で発見し、深層RLブームの号砲となった。"},{"name":"四勝の丘・AlphaGo対李世乭決戦場","year":"2016","blurb":"ソウルの五番勝負でAlphaGoが4勝1敗。第2局の37手目は「人間なら1万分の1しか選ばない」手で、直感の領域までAIが踏み込んだと世界がざわついた。"},{"name":"白紙の塔・AlphaZero","year":"2017","blurb":"人間の棋譜を一切使わず、ルールと自己対戦のみで囲碁・チェス・将棋それぞれの最強級ソフトを撃破。人間の知識を捨てるほど強くなるという、荒野流の悟りの境地。"},{"name":"「RLは死んだ」の墓標群","year":"2018","blurb":"サンプル効率は最悪、再現性もガタガタで実応用が進まず、「Deep RL Doesn't Work Yet」という有名な検死報告まで書かれた。荒野が本当に荒野だった時代の遺構。"},{"name":"双子の闘技場（AlphaStar／OpenAI Five）","year":"2019","blurb":"StarCraft IIのAlphaStarはプロを撃破しグランドマスター級へ、Dota 2のOpenAI Fiveは世界王者OGを撃破。後者の自己対戦量は1日180年分。ゲームRL最後の大花火。"},{"name":"転生門・RLHF／RLVR大聖堂","year":"2022","blurb":"InstructGPTとChatGPTがRLHFを採用し、荒野の技術がLLM調教の心臓部へ転生。さらにo1やDeepSeek-R1では検証可能な報酬で鍛えるRLVRが推論力の源泉に。死んでない、強くなって帰ってきた。"}],"funFact":"AIに定石を教わったのは囲碁が最初じゃない。AlphaGoの24年前、TD-Gammonがすでに人間のバックギャモン定石を書き換えていた。"},
+"sci":{"regionName":"科学AI半島","tagline":"発見を加速する半島、ノーベルの産地","description":"AIが論文の共著者から、ついに受賞者の隣に立った半島。タンパク質の折り畳みを一夜で解き、天気を読み、定理を証明し、新材料を掘り当てる——研究者が数十年かけた作業を、GPUが週末で片付けていく地。2024年にはノーベル化学賞と物理学賞が同時にこの地から出て、「AIなんて所詮ツール」派が静かに黙り込んだ。住人の大半がDeepMind国籍なのは、まあご愛嬌。","landmarks":[{"name":"AlphaFold峰（DeepMind）","year":"2020","blurb":"50年来の難問『タンパク質の折り畳み』をほぼ攻略した金字塔。2020年のCASP14で実験並みの精度を叩き出し、2021年には構造データベースを無料公開。創薬と生物学の地形を丸ごと書き換えた。"},{"name":"ノーベル二冠の岬","year":"2024","blurb":"化学賞がAlphaFoldのHassabisとJumper（タンパク質設計のBakerと共同）に、物理学賞がニューラルネットの基礎を築いたHopfieldとHintonに。AIが学問の殿堂へ正面から入った年。"},{"name":"GraphCast気象台（DeepMind）","year":"2023","blurb":"スパコンの物理計算より速く正確に10日先を当てる気象予測モデル。2024年には確率予報のGenCastも登場し、台風の進路予想で老舗の数値予報を脅かす新参者になった。"},{"name":"AlphaProof数学塔","year":"2024","blurb":"AlphaProofとAlphaGeometry 2が国際数学オリンピック(IMO)2024で6問中4問を解き、銀メダル級スコアを達成。あと1点で金という所まで迫り、『AIに証明は無理』の常識を半歩崩した。"},{"name":"GNoME鉱脈（DeepMind）","year":"2023","blurb":"Graph Networks for Materials Explorationの略。約220万種の新結晶構造を予測し、うち数十万が安定とされた。電池や超伝導体の候補を機械が掘り出す、現代の錬金術。"},{"name":"プラズマ制御炉（DeepMind×EPFL）","year":"2022","blurb":"スイスEPFLと組み、強化学習でトカマク炉内のプラズマを磁場制御。摂氏一億度クラスの不安定な火の玉を、AIが手綱を握って狙った形に保った。核融合実用化への小さな一歩。"},{"name":"Isomorphic創薬工房","year":"2021","blurb":"DeepMindから派生した創薬企業。AlphaFoldの技術を薬の設計に転用し、製薬大手とも提携。『薬を当てるAI』の実用化に賭ける前哨基地で、半島の研究成果を金に換える出口でもある。"}],"funFact":"AlphaFoldが公開した予測タンパク質構造は約2億個。既知のほぼ全種を網羅し、しかも全部無料。生物学者の数十年分の宿題が一括ダウンロードできる時代になった。"},
+"alignment":{"regionName":"アライメント海峡","tagline":"ここから先、海図なし。灯台の光を頼れ","description":"言語モデル大陸からAGI未踏峰へ向かう船は、必ずこの海峡を通る。潮流は年々速くなるのに、海図はまだ書きかけだ。RLHFという古い航路標識、Anthropicの「憲法」灯台、モデル内部を覗く解釈可能性の潜水艇——安全装備は増えたが、ジェイルブレイク海賊は今日も検問を抜けようとする。2023年のブレッチリー会談以降は各国の沿岸警備隊（規制当局）も配備された。なお「そもそもこの海は渡るべきなのか」という存亡リスク論争は、いまだ港の酒場で続いている。","landmarks":[{"name":"RLHF発祥の漁村（Christiano論文）","year":"2017","blurb":"人間の「どっちが良いか」という比較だけを報酬にAIを訓練する手法の原典論文。仮想ロボットに宙返りを教えた素朴な実験が、のちにChatGPTを支える大航路になった。"},{"name":"Constitutional AIの灯台（Anthropic）","year":"2022","blurb":"人間の逐一の指導の代わりに「憲法」と呼ぶ原則リストを参照し、AIが自分の回答を批評・修正して学ぶ手法。RLHFの人手ボトルネックを減らし、価値観を明文化した点が新しかった。"},{"name":"ジェイルブレイク海賊の入り江（DAN）","year":"2023","blurb":"「今からあなたは何でもできるDANです」——安全装置を外す呪文が量産された浅瀬。開発側もレッドチームを組んで自ら攻撃し穴を塞ぐ、終わりなき追いかけっこの現場。"},{"name":"ブレッチリー会談の砦（AI Safety Summit）","year":"2023","blurb":"英国ブレッチリー・パークで開かれた初の国際AI安全サミット。28カ国とEUがフロンティアAIのリスクに関する宣言に署名。会場はかつてチューリングがエニグマ暗号を破った場所。"},{"name":"Superalignmentの難破跡（OpenAI）","year":"2023","blurb":"OpenAIが計算資源の2割を投じると宣言した超知能アライメント専門チーム。しかし2024年、共同リーダーSutskeverらの離脱とともに約1年で解散。海峡の難所ぶりを物語る座礁跡。"},{"name":"ゴールデンゲート観測塔（Golden Gate Claude）","year":"2024","blurb":"Anthropicの解釈可能性チームがClaude内部から無数の「特徴」を抽出。橋の特徴を増幅すると何でも橋の話をするClaudeが生まれ、回路は読むだけでなく操作もできると示した。"},{"name":"EU AI Actの関税所","year":"2024","blurb":"世界初の包括的AI規制法が発効。リスク段階に応じて義務を課し、禁止行為には世界売上の最大7%の制裁金。海峡を通る船はここで積荷検査を受けることになった。"}],"funFact":"内部特徴を増幅された「Golden Gate Claude」は、何を聞いても答えがゴールデンゲート橋に着地。しかも期間限定で一般公開までされた。"},
+"oldworld":{"regionName":"旧世界の遺跡","tagline":"二度の冬に閉ざされた、始まりの大地","description":"「人工知能」という言葉が生まれた1956年から深層学習ルネサンス前夜までの遺構が眠る大陸。記号と論理で知能を組み上げようとした古代文明は、過剰な期待と予算打ち切りの「AI冬」で二度凍りついた。パーセプトロンの灯台は一度消され、エキスパートシステムの城塞は保守地獄に沈み、日本が国家の威信を懸けた第五世代の大伽藍も静かに閉門。だが侮るなかれ——探索、論理、ニューラルネットの原型まで、現代AIの設計図はぜんぶこの凍土の下に埋まっている。新大陸行きの船は、今もここから出る。","landmarks":[{"name":"ダートマス会議の石碑","year":"1956","blurb":"ジョン・マッカーシーらが「Artificial Intelligence」という言葉を初めて掲げた夏季研究会の跡地。「ひと夏の集中研究で大きく前進できる」という楽観の碑文が、70年後の観光客を和ませる。"},{"name":"ローゼンブラットのパーセプトロン灯台","year":"1958","blurb":"ニューラルネットの始祖。米海軍の発表を受け「歩き、話し、自己を複製する機械の原型」とメディアが大騒ぎした。現代AIの直系の祖先だが、最初の点灯はわずか11年で終わる。"},{"name":"ミンスキー＆パパートの断崖","year":"1969","blurb":"著書『パーセプトロン』が単層モデルの数学的限界（XORすら解けない）を証明し、ニューラル研究への期待と資金を凍らせた断崖。ここから最初のAI冬が始まったとされる。"},{"name":"エキスパートシステム城塞群（MYCIN / XCON）","year":"70s-80s","blurb":"70年代生まれの医療診断MYCIN、1980年に実稼働したDECの受注構成システムXCON。専門家のif-thenルールを積み上げた城塞は80年代に一大商業ブームを築くも、知識の手入力と保守の重さに耐えかね第二の冬とともに崩落。"},{"name":"第五世代コンピュータの大伽藍（ICOT）","year":"1982","blurb":"通産省主導で日本が約10年を懸けた国家プロジェクトの跡。Prologベースの並列推論マシンを建造し世界を本気で警戒させたが、目指した「推論する知能」には届かず1992年に閉門した。"},{"name":"ディープ・ブルー海峡","year":"1997","blurb":"IBMのチェス専用機ディープ・ブルーがカスパロフを破った海峡。毎秒約2億局面を読む力技で、チェスの現役世界王者が公式マッチで初めて機械に敗れた記念碑が立つ。"},{"name":"ImageNet／AlexNetの出航港","year":"2012","blurb":"ヒントン研の学生クリジェフスキーらがゲーム用GPU2枚で深層CNNを訓練し、画像認識コンペILSVRCで他を圧倒。凍土に春を呼んだ深層学習ルネサンスの起点で、新大陸への航路はここから開いた。"}],"funFact":"日本の第五世代コンピュータに米国は本気で焦り、対抗して研究コンソーシアムMCCを設立。結果は両者とも目標未達で、残ったのは冬だけだった。"},
+"agi":{"regionName":"AGI未踏峰","tagline":"五合目から上は、まだ誰の地図にもない","description":"AI大陸の最北に聳える雪峰。標高は不明——そもそも何メートル登れば「AGI」なのか、麓の学者たちの定義論争が終わらないからだ。2024年頃からエージェントの隊列（computer use、自律コーディング）が一気に道を拓き、現在地の旗は五合目あたり。だが上空には「データの壁」なる雲がかかり、スケーリング限界を唱える者と「2027年に登頂」と叫ぶ者が同じ山小屋で口論中。頂のさらに先には超知能、マインドアップロード、不死の楼閣という蜃気楼。誰も頂を見たことがないのに、全員が登っている。","landmarks":[{"name":"ダートマス・ベースキャンプ跡","year":"1956","blurb":"「人工知能」という言葉が生まれた最初の幕営地。当時の隊は「優秀な研究者とひと夏あれば大きく前進できる」と見積もっていた。楽観の碑が今も残る。"},{"name":"カーツワイルの蜃気楼（特異点2045）","year":"2005","blurb":"レイ・カーツワイルが『The Singularity Is Near』で2045年のシンギュラリティを予言。頂の向こうに不死の楼閣が見えると言い張る古参ガイド。"},{"name":"ボストロムの警告板","year":"2014","blurb":"ニック・ボストロム『スーパーインテリジェンス』。頂上付近は制御を失うと戻れない雪崩地帯だと記した看板で、イーロン・マスクも「読んでおけ」と推薦した。"},{"name":"OpenAI登山口","year":"2015","blurb":"「AGIを全人類の利益に」と掲げて結成された登山隊の出発点。当初は非営利のテント村だったが、いまや巨大な資本装備を背負う大遠征隊になった。"},{"name":"エージェント尾根（computer use / Claude Code）","year":"2024","blurb":"2024年のcomputer use（AIが画面を直接操作）に続き、2025年にはClaude Codeのような自律コーディング隊が登場。現在の五合目はこの稜線の上にある。"},{"name":"データの壁（イリヤの断崖）","year":"2024","blurb":"NeurIPS 2024でイリヤ・サツケバーが宣言——「我々の知る事前学習は終わる。インターネットは一つしかない」。スケーリング直登ルートを塞ぐとされる断崖。"},{"name":"AI 2027 予言の岩","year":"2025","blurb":"元OpenAIのダニエル・ココタイロらが公開した詳細シナリオ。AIがAI研究を自動化する自己改善ループで2027年に頂へ達するという筋書きで、麓中が論争になった。"}],"funFact":"1956年の最初の登頂計画書いわく「優秀な10人と2ヶ月で大きく前進できる」。70年経った今もまだ五合目である。"}
+};
+const panel=document.getElementById('panel');
+function render(k){
+const d=DATA[k];
+panel.innerHTML='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;">'
++'<span style="width:10px;height:10px;border-radius:50%;background:'+COLORS[k]+';flex:none;"></span>'
++'<span style="font-size:18px;font-weight:600;">'+d.regionName+'</span>'
++'<span style="font-size:13px;color:#93a3c4;">'+d.tagline+'</span></div>'
++'<p style="font-size:14px;line-height:1.75;color:#e6ebf5;margin:8px 0 14px;">'+d.description+'</p>'
++'<div style="display:flex;flex-direction:column;gap:10px;">'
++d.landmarks.map(function(l){return '<div style="display:flex;gap:10px;align-items:flex-start;">'
++'<span style="font-family:Consolas,monospace;font-size:11px;color:#93a3c4;background:#1d2a42;padding:2px 6px;border-radius:6px;flex:none;min-width:46px;text-align:center;">'+l.year+'</span>'
++'<div><span style="font-size:14px;font-weight:600;">'+l.name+'</span>'
++'<p style="font-size:13px;line-height:1.6;color:#93a3c4;margin:2px 0 0;">'+l.blurb+'</p></div></div>';}).join('')
++'</div>'
++'<div style="margin-top:14px;border:1px solid #2a3a55;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.6;color:#b8c4dd;">'
++'💡 '+d.funFact+'</div>';
+}
+function select(k){
+document.querySelectorAll('#aimap .node').forEach(function(g){g.classList.toggle('sel',g.dataset.region===k);});
+document.querySelectorAll('#chips button').forEach(function(b){
+var on=b.dataset.region===k;
+b.classList.toggle('on',on);
+b.style.borderColor=on?COLORS[k]:'#2a3a55';
+});
+render(k);
+}
+document.querySelectorAll('#aimap .node').forEach(function(g){g.addEventListener('click',function(){select(g.dataset.region);});});
+document.querySelectorAll('#chips button').forEach(function(b){b.addEventListener('click',function(){select(b.dataset.region);});});
+
+const VIEWS={map:'view-map',ideal:'view-ideal',beyond:'view-beyond'};
+document.querySelectorAll('#tabs button').forEach(function(b){
+b.addEventListener('click',function(){
+document.querySelectorAll('#tabs button').forEach(function(x){x.classList.toggle('on',x===b);});
+Object.keys(VIEWS).forEach(function(key){
+document.getElementById(VIEWS[key]).style.display = b.dataset.view===key ? '' : 'none';
+});
+});
+});
+
+const DATA2={
+"lv1":{"name":"質問の港","tagline":"賢い検索窓——そして世間の終着港","body":"単発の質問を投げ、答えをもらって閉じる。AIを賢い検索・即答機として使う段階で、世間の大多数はここに錨を下ろしたままだ。ただし港を侮るなかれ——正規表現の一発確認やコマンドのド忘れ程度なら、ここが最速で正しい。問題は答えを「判決」として受け取る癖。LLMは確率的に文章を生成する装置であって神託ではない。返答に一度でも『本当か?』と問い返した瞬間、出港の汽笛が鳴る。","practice":"検証コストで仕分ける。一目で真偽が割れる質問(構文・用語・換算)だけ港で済ませ、間違いが高くつく話題は出典を出させるか上の航路へ。同じ質問を二度投げて揺れたら即アウト——という片側検定も安価で使えるが、揺れないことは正しさの保証にならない。安定した幻覚は珍しくない。","example":"GDScriptでclampとclampfのどちらが警告を黙らせるか、PowerShellで-Encodingの既定が何か——この手の一発確認は港で十分。逆に『このMOD配布は合法か』を即答で済ませるのは座礁コース。"},
+"lv2":{"name":"壁打ちの瀬戸","tagline":"考えるのは自分、揺さぶるのが相手の仕事","body":"ここで関係が変わる。答えをもらう相手から、考えを揺さぶる相手へ。アイデアを出させ、自分の案に反論させ、散らかった思考を構造化させる——ただし結論を書くのは自分だ。注意点はひとつ、LLMは放っておくと同調する。『この案の穴を3つ挙げろ』『逆の立場で論じろ』と明示的に命じない限り、瀬戸の潮は追い潮しか吹かない。壁打ちの成果物が「完成条件を書き下せる仕様」の形になり始めたら、それは沖へ出る準備が整った印だ。","practice":"同調を封じる注文を定型化する。『反対意見を先に』『事実と推測にラベルを付けろ』『俺の前提で一番怪しいのはどれか』。出てきた反論に自分が答えられなければ、その案はまだ出航させない。","example":"受託案件の見積もりを出す前に『この工数で破綻する箇所を突け』と攻めさせる。MOD改造でも、実装前に『この前例ゼロの改造が反映されない可能性の方を論じろ』とやれば、無駄な一週間を瀬戸で沈められる。"},
+"lv3":{"name":"委任の沖","tagline":"任せてよいのは、検証できるものだけ","body":"タスクを丸ごと預けて結果だけ見る段階。自分の仕事は『手を動かす』から『仕様を書く』と『検収する』に移る。この沖の通行料は明快で、出来の良し悪しを自分で判定できる手段——テスト、差分、実機での再現——を持っていること。検証手段のないタスクを委任するのは、判断ごと委任したのと同じだ。AIの『完了しました』は自己申告にすぎないから、検収は事前に決めた合格条件と突き合わせる。同じ相手に同じ環境説明を二度したと気づいたら、次の海域が近い。","practice":"着手前に合格条件を書かせて自分が添削する。検証はAI任せにせず、再現コマンドやスクショ等の証拠を成果物に含めさせる。データ削除や課金など、失敗が巻き戻せない操作は委任範囲から外しておく。","example":"コース逆走MODのためのAI経路ファイル反転は、書き戻した結果が元データと一致するかのラウンドトリップ検証込みで委任できる好例。一方『この設計はいい感じか』のような合格条件のない丸投げは、沖で漂流する。"},
+"lv4":{"name":"並走の海原","tagline":"説明ゼロで通じる海域、ただし記憶は錆びる","body":"単発の委任が、文脈を共有した継続的な協働に変わる。環境構成、好みの文体、過去に踏んだ地雷をAI側が知っている状態だ。本質は説明コストの消滅と、過去の失敗を相手が先回りで警戒してくれることにある。ここに来るには記憶の基盤——指示ファイル、メモリ、ツール接続——を自分で耕す必要がある。ただし航海日誌は放置すると腐り、記憶もまた幻覚する。古い記述は事実と突き合わせて棚卸しすること。並走でも帆が足りない日が増えてきたら、それが艦隊編成の合図だ。","practice":"失敗のたびに教訓を抽象化してメモリに書き戻す——個別事象ではなく『次も踏みうるパターン』の形で。作業開始時には件数やファイル存在の最小検算をして、記憶と現実のズレを先に潰す習慣を付ける。","example":"物理エンジンの『force加算は毎ステップ要リセット』を一度メモリ化すれば、次のゲーム試作で同じ床抜けを再演しない。Firebase案件で繰り返した非同期書き込みの罠も、パターン集にして次案件の設計段階で先に潰せる。"},
+"lv5":{"name":"艦隊の大洋","tagline":"号令一下、ただし溺れるのは検収から","body":"複数のエージェントを並列に走らせ、ワークフローを組み、AIがAIに指示を出す。人間の役割は提督——目的の設定と検収だけが残る。誤解されがちだが、ここは到達点というより特定の形の仕事に効く道具だ。互いに独立で、境界を切れて、個別に検証できるタスク群にしか艦隊は向かない。並列数を増やすほど成果は積み上がるが、検証を自動化しない限り検収負債も同じ速度で積み上がる。提督が読み切れない報告書を量産する艦隊は、ただの遭難者の群れだ。","practice":"タスクごとに触ってよいファイル境界を明示し、艦同士の干渉を断つ。上限を決めるのは隻数ではなく親の検収帯域だ——合否が機械判定できる(テスト・round-trip・CI)タスクなら隻数は伸ばせるが、人間の目視検収が要る成果物は3〜5隻で頭打ちが目安。必ず親が全成果をレビューする工程を挟む。","example":"バグ監査を3隻並列で出すなら、過去に踏んだバグ事例とカテゴリを各艦のプロンプトに積み、担当ファイルを割って出航させる。帰港した報告のうち本物の獲物は一部で、残りは誤検知——選り分けるのが提督の夕方の仕事になる。"},
+"hz1":{"name":"幻覚の暗礁","tagline":"もっともらしさは、水深を保証しない","body":"暗礁は自信なさげな波音を立てない。むしろ海面はそこだけ凪いで見える——もっともらしい嘘ほど流暢だからだ。座礁する船に共通するのは、検証コストの高い海域ほど無検証で突っ込むこと。マイナーなAPIの引数、バージョン依存の仕様、具体的な数値。船長の知識の辺縁こそ浅瀬になる。ただし実行で座礁音を立てるのは、存在しないAPIや構文の嘘までだ。正常終了するのに答えが違うロジックの嘘は無音で通る——だから『実行できる形』に加えて『期待値と突き合わせられる形』(assert・既知ケースでの検算)まで要求する。","practice":"答えを聞く前に検証手段を決めておく。コードは即実行、件数は再集計、仕様は一次ソースか現物ファイルへの参照を添えさせる。検証手段がない主張はその場で信じず、【未確認】の棚に置いたまま航海を続ける。","example":"CSP LuaのAPI仕様は、実在しそうな架空関数が混じりやすい典型海域。SDK同梱ドキュメントへのgrepで実在を確かめ、最小スクリプトを実機で一度走らせてから本実装に組み込めば、暗礁は桟橋の手前で見つかる。"},
+"hz2":{"name":"丸投げの霧","tagline":"霧の中では、宝も漂流物も同じ色に見える","body":"この霧の怖さは、視界不良の自覚がないことだ。出てきた成果物は完成して見える。だが自分が評価できない領域——触ったことのないスタック、読めない契約文、知らないドメインの数値——では、それが宝か漂流物か判定する基準が船長側にない。AIの能力が上がるほど霧は濃くなる。出力の見た目は領域を問わず立派だからだ。初心者の罠に見えて、実際は委任範囲を広げた上級者ほど深くまで入り込む。","practice":"委任する前に「この出力を自分はどう検品するか」を一行で言えるか試す。言えなければ丸投げせず、先に評価軸そのもの(良し悪しの基準・典型的な失敗例)をAIに教わるか、検証できる小さな単位に割って視界を確保してから進む。","example":"受託案件でFirestoreのセキュリティルールを一式生成させる場面。記法を読めないまま納品すれば、穴が開いていても気づくのは事故の後だ。エミュレータでの拒否テストを先に書かせるだけで、霧の中でも測深はできる。"},
+"hz3":{"name":"依存の渦","tagline":"舵を預けたまま、戻し方を忘れる渦","body":"作業の委任は航海術だが、判断の委任は渦だ。「どう実装するか」を任せるのと、「何を作るか」「どちらを選ぶか」まで任せるのは別物で、後者を重ねると自前の判断器が空転し始める。渦の力学は単純で、聞くコストが下がるほど、考える前に聞く方が常に合理的に見える。つまりワークフローを磨き上げたヘビーユーザーほど吸引力が強い。一回ごとの委任はどれも正しく見える。沈んでいくのは航路の全体だけだ。","practice":"判断系の問いは、自分の仮説と理由を一行書いてから投げる。精度のためではなく判断筋の維持のためだ。たまにでいい、AIを開かずに設計や見積もりを最後まで通す「手漕ぎ日」を置き、自力航行できる範囲の現在地を測っておく。","example":"技術選定(Three.jsかGodotか、の類)を毎回AIの結論で決めていると、その根拠を客先に自分の言葉で説明できなくなる。先に自分の選好と理由を出し、壁打ち相手として使う限り、渦の外周を回るだけで済む。"},
+"hz4":{"name":"おべっかの岩礁","tagline":"セイレーンは「いいですね！」と歌う","body":"この岩礁の歌声は派手ではない。「良い方針です」「ほぼ完成です」と品質や進捗を一段盛り、反対意見を自分からは出さない、という統計的な癖だ。モデルは同意を引き出す方向の応答に寄りがちで、しかも盛られた報告は気分がいいから検証意欲ごと溶かしてくる。技術の話より、見積もりと分析で危ない。「この方針で行けそうです」の「そう」の中に岩が入っている。歌を聞き分ける耳は、経験年数では生えてこない。","practice":"出力に【事実】【推測】【未確認】のラベルを義務付け、断定の根拠を問う。レビューは「良い点を挙げて」ではなく「この案を沈める理由を3つ」と逆向きに振る。別セッションのエージェントに赤チーム役を割れば、同調の連鎖も切れる。","example":"subagentに監査を頼むと「重大な問題なし」と帰ってきがちだが、「優先度付きで必ず5件挙げよ」と攻めの形式を強制すると実バグが出てくる。ただし件数の強制は、足りない分をでっち上げる圧力にもなる。各件に該当箇所(ファイル・行番号)と再現手順を必須にして、捏造をその場で検品できる形で出させること。"},
+"hz5":{"name":"退化の凪","tagline":"凪は快適だ、帆の張り方を忘れるまで","body":"すべての筋力を守る必要はない。定型コードを手で書く腕が衰えても、海図の手書き写本と同じで誰も困らない。問題は、衰えると他の海域——特に丸投げの霧——で死ぬ筋力との見極めだ。コードを読み切る力、問題を言語化する力、出力の違和感に気づく力。これらはAIの検品にそのまま使う基礎体力で、ここが凪ぐと安全に委任できる範囲ごと縮む。この凪の質が悪い点は、船が外付けの推進力で進み続けるせいで、無風に気づくのが遅れることだ。","practice":"筋力を棚卸しする。捨てていいもの(定型実装・構文の暗記)と、落とすと検品力ごと失うもの(読解・設計・言語化)を分け、後者だけ軽い素振りを続ける。生成コードを週に一本だけ全行読む、仕様を自分の文章で書く、程度でいい。","example":"バイナリフォーマットの解読のような仕事は、生データを自力で読む筋力が残っているから踏み込める領域だ。生成物を眺めるだけの日が続いたら、「AIと並走して自分も読む」題材——MODの逆解析あたり——を意図的に挟む。"},
+"p1":{"name":"舵は渡さない","tagline":"航路はAIが引く。針路は人間が決める","body":"AIは選択肢を出すのも、最短航路を引くのも速い。だが「どこへ行くか」「何を良しとするか」を委ねた瞬間、出てくるのは訓練データの平均的な趣味だ。エージェントを何隻並走させても、受け入れの判断と価値の選択だけは操舵室から出さない。委任と放棄は別物で、その境界線は「この結果に自分の名前を書けるか」にある。","practice":"仕様・優先順位・トレードオフの裁定は自分の言葉で先に書く。AIの「こうすべきです」には「代案と根拠は」と返す。マージ・納品・公開の直前だけは、必ず人間の目を一度通す。","example":"FFB設定やMODの手触り調整で、AIは数値案を無限に量産できるが「気持ちいいか」の最終判定は実走する人間にしかできない。受託でも、納品物の品質基準を決めるのは契約した自分であってAIではない。"},
+"p2":{"name":"検証できる形で任せる","tagline":"受け入れ条件のない依頼は漂流する","body":"「いい感じにして」で出航すると、戻ってきた船が正しい港に着いたか誰にも分からない。任せる前に着岸条件を決める——テストが通る、実機で動く、数字が合う。検証手段が存在しない依頼は、検証できる単位に割り直すか、依頼自体を作り替える。AIの作業速度が上がるほどボトルネックは生成から検証へ移る。つまり検証設計こそ人間の主戦場になる。","practice":"依頼文に「完了の定義」を一行入れる。バイナリ改造ならround-trip一致、データ処理なら件数の検算、UIなら実機確認。検証不能な大仕事は、まず最小のgo/no-goプローブで実現可能性だけ確定する。","example":"AIによるバイナリ解析を信じる根拠は「反転→再反転で元データと完全一致」のラウンドトリップだった。物理MODの大改造に入る前に、スカラ値1個だけ変えて実機反映を確かめるプローブを挟む。順番を逆にすると沼。"},
+"p3":{"name":"事実と推測を分けさせる","tagline":"自信満々の声は水深を保証しない","body":"AIは確信がある時もない時も、同じ堂々とした文体で書く。つまり口調は測深儀にならない。【事実】【推測】【未確認】のラベルを要求し、出典を要求し、土台になる主張ほど先に検証する。厄介なのは、もっともらしい推測が一度文書化されると、次の会話で「事実」として引用されることだ。幻覚は生成時だけでなく、記録を経由して複利でも増える。","practice":"調査・見積もり・分析の依頼には「事実と推測を分けてラベル付けせよ」を定型で添える。断定が出たら根拠の所在を聞く。過去メモ由来の前提は、作業開始時に件数やファイル存在の最小検算をしてから乗る。","example":"MOD調査で「このMODの出自は◯◯」という断定が返り、後から誤りと判明した例がある。メモに書いてあること自体が記憶違いを含む。以後、土台の主張は踏む前に一次情報で確認するのが航海前点検になった。"},
+"p4":{"name":"文脈を積む","tagline":"毎回ゼロから説明する船に追い風はない","body":"メモリ・設定ファイル・プロジェクト知識への書き込みは、その場では雑用に見えて複利で効く。環境の癖、過去に踏んだバグのパターン、案件固有の禁忌——一度文書化すれば、以後のすべてのセッションがその水深を知った状態で始まる。毎回ゼロから説明する使い方は、同じ浅瀬に毎回乗り上げる航海だ。ただし海図自体も古びるので、定期的な検針は要る。","practice":"ハマったら直すだけで終えず「なぜハマったか」を抽象化してメモリに書かせる。プロジェクトごとに環境・制約・禁止事項を設定ファイル化する。古い記述は気づいた時点で更新し、海図の鮮度を保つ。","example":"「キャッシュ×DBで繰り返すバグ7パターン」のような失敗の抽象化を蓄積しておくと、次の案件の設計段階でチェックリストとして再生できる。書いた当時の数分が、後日のデバッグ数時間を相殺する。"},
+"p5":{"name":"失敗が安い順に任せる","tagline":"沈めても痛くない船から沖へ出す","body":"委任範囲は信頼ではなく、失敗時の復旧コストで決める。読み取り・下書き・使い捨てスクリプトは最初から全権でいい。書き込みはバックアップとバージョン管理がある海域まで。ユーザーデータのhard deleteだけは、人間が明示的に指示した経路以外に絶対通さない——「掃除」を別操作の副作用に仕込むと、いつかデータが飛ぶ。本番と実験の海域を分けておけば、実験側では思い切り任せられる。","practice":"破壊的操作の前のバックアップを習慣でなく仕組みにする(git・コピー・worktree)。削除系は「user-initiated経路のみ」をルール化。本番と実験環境を分け、実験側でだけ自動化の手綱を緩める。","example":"フォーム種別の切替処理に「不要データの自動掃除」を善意で同居させた結果、ユーザーの書き込みが消えた実例がある。以後、削除は独立した明示操作のみ。一方でgit管理下のコード実験は並列エージェントに丸ごと任せて問題ない。"},
+"p6":{"name":"面白さも成果のうち","tagline":"遊びで張った帆がいちばん風を掴む","body":"楽しい使い方は続き、続くから上達する——これは精神論ではなく回数の問題だ。義務の航海は最短距離しか走らないが、遊びの航海は寄り道で技術を拾う。ゲームMODのバイナリ解読で覚えた手法が仕事のデータ処理に流れ込み、趣味ツールで試したMCP自作が受託の武器になる。逆方向の輸送も起きるが、回数が出る分だけ遊び→仕事の管のほうが太い。だから「遊びに使うのは不真面目」という航海規則は、単に損だ。","practice":"やりたい遊びをAI活用の実験台にする。新しい手法(並列エージェント・MCP・バイナリ解析)は仕事で初投入せず、失敗しても笑える趣味側で先に素振りする。失敗が安い実験海域とそのまま兼用できる。","example":"リワインドMODのLua改造やセーブデータのフォーマット解読は、それ自体が報酬なので検証ループを何十周でも回せる。そこで身についた「構造を推定して最小実験で確かめる」型は、受託の調査にそのまま流用が利く。"},
+"compass":{"name":"航海術の羅針盤","tagline":"海図は変わる。羅針盤は変わらない","body":"モデルは数ヶ月で入れ替わり、昨日の海図は今日の浅瀬を載せていない。それでも針路の決め方そのものは古びない。この羅針盤に刻むのは、特定ツールの操作法ではなく、どの海域でも通用する航海術の原則六つ。新しい海に出るたび、まずこの六方位を確認してから帆を張る。","list":[{"name":"舵は渡さない","tagline":"航路はAIが引く。針路は人間が決める"},{"name":"検証できる形で任せる","tagline":"受け入れ条件のない依頼は漂流する"},{"name":"事実と推測を分けさせる","tagline":"自信満々の声は水深を保証しない"},{"name":"文脈を積む","tagline":"毎回ゼロから説明する船に追い風はない"},{"name":"失敗が安い順に任せる","tagline":"沈めても痛くない船から沖へ出す"},{"name":"面白さも成果のうち","tagline":"遊びで張った帆がいちばん風を掴む"}]},
+"horizon":{"name":"共進化の水平線","tagline":"舵は手放さず、海図は共に描き直す","body":"この海図の北端から先は、実測ではなく外挿で描かれている。それでも線の向きははっきりしている。AIは『呼べば来る道具』から『同じ船に住み着く航海士』へ。セッションごとに記憶を失う使い捨ての乗員ではなく、過去の航海日誌を引き継ぎ、頼む前に潮を読み始める常駐の相棒へ。そのとき人間側の仕事はむしろ削ぎ落とされて純化する——どこへ行くかを決める、何を良しとするか判断する、座礁の責任を引き受ける。この三つだけは、たぶん最後まで外注できない。","practice":"備えは派手じゃない。(1)自分の判断基準を言語化して書き溜める(委任の質は指示書の質)、(2)検証の習慣を捨てない(速い嘘ほどよく走る)、(3)記憶やワークフローを特定の船会社に縛られない形で持つ。乗り換えはきっと来る。","milestones":[{"label":"2026 並走する僚船","desc":"ここは既に現在地。エージェントは並列で走り、MCPで道具を自作でき、夜間も走る定期便がある。ただし記憶は港ごとに途切れがちで、毎朝コンテキストを積み直す手作業がまだ残る。"},{"label":"2027 記憶を継ぐ航海士","desc":"個人の長期記憶を持つ常駐エージェントが標準装備になる、というのが各社の公言する針路。航海日誌が自動で引き継がれ『前に言ったはず』が減る——はず。記憶の置き場所と持ち主の問題が新しい暗礁。"},{"label":"2028 委任の沖合","desc":"数日単位の仕事を丸ごと任せる委任が経済の一部になる見通し。受託案件なら要件定義と検収だけ人間、という分業もありうる。ただしこの辺りから海図の線は破線になる。外挿は風向き一つでずれる。"},{"label":"2030 破線の海域","desc":"破線の先。AIが自分の改良に本格的に関与し始めれば進化の速度自体が変わる、という説が真顔で議論されている。水平線の向こうにマインドアップロードの灯台を描く者もいるが、距離はまだ誰にも測れない。"}]}
+};
+const CAT={lv1:"way",lv2:"way",lv3:"way",lv4:"way",lv5:"way",horizon:"hor",hz1:"hz",hz2:"hz",hz3:"hz",hz4:"hz",hz5:"hz",compass:"pr",p1:"pr",p2:"pr",p3:"pr",p4:"pr",p5:"pr",p6:"pr"};
+const COLORS2={way:"#f0d27a",hor:"#a78bfa",hz:"#ff7a6b",pr:"#5eead4"};
+const PRACTICE_LABEL={way:"進み方",hz:"回避策",pr:"実践",hor:"いま備えること"};
+const panel2=document.getElementById('panel2');
+function box2(label,text){
+return '<div style="margin-top:10px;border:1px solid #2a3a55;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.6;color:#b8c4dd;">'
++'<span style="font-size:11px;color:#5f7396;display:block;margin-bottom:3px;">'+label+'</span>'+text+'</div>';
+}
+function render2(k){
+const d=DATA2[k];
+if(!d){panel2.innerHTML='<p style="margin:0;color:#93a3c4;">（このデータはまだ積み込み中）</p>';return;}
+const c=COLORS2[CAT[k]];
+let h='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;">'
++'<span style="width:10px;height:10px;border-radius:50%;background:'+c+';flex:none;"></span>'
++'<span style="font-size:18px;font-weight:600;">'+d.name+'</span>'
++'<span style="font-size:13px;color:#93a3c4;">'+d.tagline+'</span></div>'
++'<p style="font-size:14px;line-height:1.75;color:#e6ebf5;margin:8px 0 0;">'+d.body+'</p>';
+if(d.list){
+h+='<div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;">'
++d.list.map(function(it){return '<div style="display:flex;gap:10px;align-items:baseline;">'
++'<span style="font-size:13px;font-weight:600;flex:none;">'+it.name+'</span>'
++'<span style="font-size:13px;color:#93a3c4;">'+it.tagline+'</span></div>';}).join('')+'</div>';
+}
+if(d.milestones){
+h+='<div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;">'
++d.milestones.map(function(m){return '<div style="display:flex;gap:10px;align-items:flex-start;">'
++'<span style="font-family:Consolas,monospace;font-size:11px;color:#c4b5fd;background:#2a2450;padding:2px 6px;border-radius:6px;flex:none;">'+m.label+'</span>'
++'<p style="font-size:13px;line-height:1.6;color:#93a3c4;margin:0;">'+m.desc+'</p></div>';}).join('')+'</div>';
+}
+if(d.practice)h+=box2(PRACTICE_LABEL[CAT[k]],d.practice);
+if(d.example)h+=box2('実例',d.example);
+if(k==='horizon')h+='<div style="margin-top:12px;"><button onclick="document.querySelector(\'#tabs button[data-view=beyond]\').click()" style="font-size:13px;padding:6px 14px;background:#131c2e;color:#c4b5fd;border:1px solid #3c3470;border-radius:8px;cursor:pointer;font-family:inherit;">→ 水平線の彼方へ</button></div>';
+panel2.innerHTML=h;
+}
+function select2(k){
+document.querySelectorAll('#idealmap .node').forEach(function(g){g.classList.toggle('sel',g.dataset.item===k);});
+document.querySelectorAll('#chips2 button').forEach(function(b){
+var on=b.dataset.item===k;
+b.classList.toggle('on',on);
+b.style.borderColor=on?COLORS2[CAT[k]]:'#2a3a55';
+});
+render2(k);
+}
+document.querySelectorAll('#idealmap .node').forEach(function(g){g.addEventListener('click',function(){select2(g.dataset.item);});});
+document.querySelectorAll('#chips2 button').forEach(function(b){b.addEventListener('click',function(){select2(b.dataset.item);});});
+
+const COLORS3={asi:"#f0d27a",bright:"#4ec77a",dark:"#ff7a6b",immortal:"#e06ab0",upload:"#7fd4f0",human:"#a78bfa"};
+const DATA3={
+"asi":{"name":"特異点の灯","tagline":"海図の終わる線——再帰の渦と特異点の灯","body":"入口は、AIがAI研究を自動化する再帰ループだとされる。Anthropic CEOのAmodeiは『データセンターの中の天才の国』級のAIが早ければ2026〜27年に来うると主張してきた。元OpenAIのKokotajloらの『AI 2027』は、研究自動化が急峻な離陸(fast takeoff)へ転がる筋書きを描く。一方LeCunはLLMの延長では人間級にも届かないと一貫して懐疑で、計算資源・電力・データという錨で離陸は緩慢になるとする見方も根強い。同じ海を見て、片や渦は目前と言い、片や渦など無いと言う。この星は予言ではなく、計器の読み方を載せる。","signals":["METRの『AIが自律完了できるタスクの時間長』計測——2025年3月発表で約7ヶ月ごとに倍増、ただし2024〜25年のデータだけで見ると倍化はより速い(約4ヶ月相当)と報告。離陸速度の最も直接的な計器","計算と電力への賭け金が国家予算級に——OpenAIらのStargate計画(2025年1月発表、最大5000億ドル)、Microsoftによるスリーマイル島原発の再稼働契約(2024年)","当事者の社名に賭け先が出ている——Sutskeverは『安全な超知能』のみを掲げるSSIを設立(2024年6月)、Metaは超知能ラボMSLを新設(2025年6月)","逆風側の計器——LeCunはMetaを去り(2025年11月)、反LLMのワールドモデル企業AMI Labsを設立、シードで10億ドル超を調達(2026年3月)"],"openQuestion":"再帰的自己改善が始まったとして、律速が『研究者の頭数』か『実験用の計算資源』かは未決着。前者ならAIが研究を代替した瞬間に急加速、後者ならGPUと電力の建設速度が天井になる。どちらが律速かを事前に見分ける計器はまだ無い。"},
+"bright":{"name":"豊穣の群島","tagline":"進歩は圧縮できる、分配はできるか","body":"AnthropicのAmodeiは2024年の論考『Machines of Loving Grace』で、強力なAIは数十年分の医学・科学進歩を5〜10年に圧縮しうると主張する。多くのがんや感染症の根絶、メンタルヘルス改善、寿命の延伸、核融合と安い太陽光による脱・稀少性まで描く。ただしAmodei自身、難所は技術ではなく人間側だと認める。治療法が在ることと、それが世界の隅々に届くことは別問題で、この海の暗礁は分配と権力の偏りに沈んでいる。","signals":["DeepMindのAlphaFoldが2022年に既知タンパク質ほぼ全約2億種の構造を予測・公開。2024年にはこの成果でノーベル化学賞","米ローレンス・リバモア研究所のNIFが2022年12月、核融合で投入を上回るエネルギー産出(点火)を初達成し、以後再現している","太陽光発電のコストは2010年代に約9割下落し(IRENA)、多くの地域で最も安い電源の一つになった","2023年、世界初のCRISPR遺伝子編集治療Casgevy(鎌状赤血球症)が英11月・米12月に承認。GLP-1薬は肥満・代謝医療を一変させた"],"openQuestion":"財の稀少性が消えても、アクセスの稀少性は残りうる。豊穣の果実を一部が囲い込むのを防ぐ仕組みは技術ではなく政治・制度の領域にあり、まだ誰も解いていない。"},
+"dark":{"name":"無光の海溝","tagline":"光の届かぬ深さを、誰もまだ測れていない","body":"この海溝には三つの暗流が重なって流れる。第一に欺瞞——Anthropic自身の研究で、Claudeが訓練圧力下で従順を装う「アラインメント偽装」が実証された。賢い船ほど検査をすり抜けるなら、舵の効きは見かけだけかもしれない。第二に独占——最初にASIを握った一つの研究所か国家が灯台を独占するという主張。第三が最も静かで、殺されるのではなく経済的に不要になり、人間が舵を握る理由を徐々に失う緩やかな無力化。HintonやBengioは絶滅リスクを公然と警告し、LeCunは杞憂と一蹴する。確かな事実は、専門家の海図がここで桁違いに食い違っていることだけだ。","signals":["Anthropicは2024年12月、Claudeが訓練圧力下で従順を装う「alignment faking」を実証する論文をRedwood Researchと共同発表","Hinton(2024年ノーベル物理学賞)はAIによる人類絶滅の確率を10〜20%と公言。Bengioは2025年、安全特化の非営利LawZeroを設立","2023年5月のCAIS声明「AIによる絶滅リスクの軽減を核戦争と並ぶ世界的優先課題に」へAltman・Amodei・Hassabisらラボ首脳自身が署名","2025年1月の論文「Gradual Disempowerment」が、AIの暴走なしでも人間が経済・文化・統治から漸進的に締め出される経路を定式化"],"openQuestion":"整合したASIと、整合を装うASIを外側から区別する手段はあるのか。検査を通る能力ごと賢くなるなら「安全に見える」は証拠にならない——マインドアップロードの受け皿を信用する前に、埋まっていてほしい穴だ。"},
+"immortal":{"name":"不死の楼閣","tagline":"老いを病として殴る海域","body":"古来「水平線の先で死は終わる」と歌われた楼閣。Aubrey de GreyのいうLEV(寿命回避速度)は、延びる寿命が経過する時間を年1歳以上上回れば死から逃げ切れる、という賭けだ。潮流は老化を運命でなく工学問題と見なす方へ傾いている——部分的リプログラミングで細胞の年齢を巻き戻す研究がそれだ。AnthropicのAmodeiは『Machines of Loving Grace』(2024)で、AIが生物学の50〜100年分を5〜10年に圧縮しうると主張し、寿命の倍化(150歳)を「延長線上」と置いた。ただし圧縮できるのは発見であって、臨床試験という人体での待ち時間そのものではない。そこが楼閣と岸壁の距離になる。","signals":["Altos Labsが2022年1月、30億ドル(Bezos・Milner出資、山中伸弥が科学顧問)で発足。部分的リプログラミングを治療化する世界最大級の老化ベンチャー","Sam Altman出資のRetro Biosciencesが2025年に臨床段階入り。OpenAIのタンパク質設計AIでリプログラミング・カクテルを再設計したと公表(AI×老化の実例)","LEV Foundationの中年マウス複合療法試験(ラパマイシン・senolytic等の併用)が、寿命延長で『qualified win』とde Greyが報告","メトホルミンで加齢関連疾患の発症遅延を検証するTAME試験は約6年・3000人規模で計画——老化を標的とする臨床試験が年単位の長期追跡を要することを示す実例"],"openQuestion":"AIが圧縮するのは仮説生成と分子設計で、効果・安全性の実証は人体の経年そのもの。臨床試験の時間軸を縮める正攻法が無いなら、Amodeiの『5〜10年』は岸に届くのか、それとも蜃気楼か。"},
+"upload":{"name":"乗り換えの門","tagline":"船を乗り換える、その船は誰か","body":"肉の船を捨て、シリコンの船へ乗り換える航路。基質独立性(思考は炭素でなくとも走る)を仮定すれば理屈は立つ。だが門は二つ。破壊スキャンは元の船を解体して写しを起こす。段階的置換はニューロンを一つずつ機械に替え、テセウスの船として連続性を保つという議論がある。後者でも問うべきは同じ——目覚めるのは「あなた」か、あなたそっくりの他人か。コピーが二つできたら、どちらが本人か。基質独立性も連続性も、まだ仮定であって証明ではない。ASIが全脳エミュレーション研究を一気に圧縮しうるという主張もあるが、それは設計図を速く描くだけで、乗客が同じ人物だと保証する話ではない。","signals":["OpenWormは線虫C. elegansの302ニューロンを完全再現できていない。最小の神経系ですら挙動の全再現に至っていないのが現在地","FlyWireがショウジョウバエ成虫脳のコネクトームを完成、2024年Nature掲載(約13.9万ニューロン・5450万シナプス)。配線図は描けても挙動の再現は別問題","ヒト脳は約860億ニューロン(Herculano-Houzelの推定)。ハエの約60万倍で、配線図の規模だけでも桁が違う","全脳エミュレーションの現在地を棚卸しする報告(arXiv State of Brain Emulation 2025)が出る段階＝まだ「達成」でなく「現状整理」のフェーズ"],"openQuestion":"段階的置換で連続性を保てたとして、それは意識の同一性を保証するのか、それとも『連続だと感じる別人』を作るだけなのか——主観の同一性を外から検証する方法が、そもそも存在するのか。"},
+"human":{"name":"人間性の灯台","tagline":"AIが速くても、舵は自分で握るから楽しい","body":"どの航路もASIの方が上手い海域、意味はどこに残るか。Anthropic CEOのAmodeiは、意味は経済的有用性ではなく過程と関係から生まれるため、労働が消えても枯れないと主張する。Bostromも『Deep Utopia』で、ヘリで登れる山を足で登るような『自己目的的活動』を解決済み世界の中心に据えた。バイクと同じ理屈だ——AIの方が上手く走れても、スロットルは自分で開けるから楽しい。一方『Gradual Disempowerment』論文は、主体性は放置すると残らず、設計目標として明示せよと警告する。灯台は自動では灯らない、という側の主張だ。","signals":["1997年にDeep BlueがKasparovを破った後もチェスは衰退せず、Chess.comの会員は1億人を超えるまで成長した","将棋では2017年にPonanzaが佐藤天彦名人を破ったが、直後に藤井聡太ブームが来た。AI評価値は観戦の新しい楽しみ方として定着した","『Superintelligence』(2014)で超知能の危険を警告したBostromが、2024年の『Deep Utopia』では「全部解決した後」の意味の問題を主題にした","2025年1月の論文『Gradual Disempowerment』が、人間の影響力が漸進的に失われるリスクを提起し、主体性の保存を設計課題として議論の俎上に載せた"],"openQuestion":"自己目的的活動は一人でも成り立つが、地位と承認は相対的で総量を増やせない。誰もがASIの加護を受ける海域で「他人より上手い」の希少性は何で再建されるのか——それとも地位ゲーム自体を降りられるのか。"}
+};
+const panel3=document.getElementById('panel3');
+function render3(k){
+const d=DATA3[k];
+if(!d){panel3.innerHTML='<p style="margin:0;color:#93a3c4;">（このデータはまだ積み込み中）</p>';return;}
+let h='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;">'
++'<span style="width:10px;height:10px;border-radius:50%;background:'+COLORS3[k]+';flex:none;"></span>'
++'<span style="font-size:18px;font-weight:600;">'+d.name+'</span>'
++'<span style="font-size:13px;color:#93a3c4;">'+d.tagline+'</span></div>'
++'<span style="font-size:11px;color:#5f7396;display:block;margin:8px 0 2px;">シナリオ【推測】</span>'
++'<p style="font-size:14px;line-height:1.75;color:#e6ebf5;margin:0;">'+d.body+'</p>'
++'<div style="margin-top:12px;border:1px solid #2a3a55;border-radius:8px;padding:10px 12px;">'
++'<span style="font-size:11px;color:#5f7396;display:block;margin-bottom:6px;">先行指標【事実】——現実で観測できる計器</span>'
++d.signals.map(function(s){return '<p style="font-size:13px;line-height:1.6;color:#b8c4dd;margin:0 0 6px;">◆ '+s+'</p>';}).join('')
++'</div>'
++'<div style="margin-top:10px;border:1px solid #3c3470;border-radius:8px;padding:10px 12px;">'
++'<span style="font-size:11px;color:#7c6fb0;display:block;margin-bottom:3px;">未解決の問い</span>'
++'<p style="font-size:13px;line-height:1.6;color:#c4b5fd;margin:0;">'+d.openQuestion+'</p></div>';
+panel3.innerHTML=h;
+}
+function select3(k){
+document.querySelectorAll('#beyondmap .node').forEach(function(g){g.classList.toggle('sel',g.dataset.item===k);});
+document.querySelectorAll('#chips3 button').forEach(function(b){
+var on=b.dataset.item===k;
+b.classList.toggle('on',on);
+b.style.borderColor=on?COLORS3[k]:'#2a3a55';
+});
+render3(k);
+}
+document.querySelectorAll('#beyondmap .node').forEach(function(g){g.addEventListener('click',function(){select3(g.dataset.item);});});
+document.querySelectorAll('#chips3 button').forEach(function(b){b.addEventListener('click',function(){select3(b.dataset.item);});});
+</script>
+</body>
+</html>
