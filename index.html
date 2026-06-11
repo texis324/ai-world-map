@@ -35,6 +35,20 @@ svg{display:block;font-family:inherit;}
 #panel2,#panel3{border:1px solid #2a3a55;background:#111a2c;border-radius:12px;padding:18px 20px;}
 #panel2 p,#panel3 p{font-size:14px;line-height:1.75;}
 button{touch-action:manipulation;}
+.clampable{cursor:pointer;}
+.clamped{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.morehint{font-size:11px;color:#5f7396;margin:3px 0 0;}
+.accrow{border:1px solid #233048;border-radius:8px;margin-top:8px;overflow:hidden;}
+.acchead{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;}
+.acchead:hover,.accrow.open .acchead{background:#16223a;}
+.accbody{display:none;padding:2px 12px 10px;font-size:13px;line-height:1.65;color:#93a3c4;}
+.accrow.open .accbody{display:block;}
+.chev{margin-left:auto;color:#5f7396;font-size:11px;flex:none;}
+.accrow.open .chev{transform:rotate(180deg);}
+.tl{position:relative;height:40px;margin:14px 4px 0;}
+.tlline{position:absolute;left:0;right:0;top:19px;height:1px;background:#2a3a55;}
+.tldot{position:absolute;width:13px;height:13px;border-radius:50%;border:2px solid #0d1726;cursor:pointer;}
+.tlcap{position:absolute;font-size:11px;color:#5f7396;top:-2px;}
 .mapscroll{border-radius:12px;}
 .swipehint{display:none;font-size:11px;color:#5f7396;margin:6px 2px 0;}
 @media (max-width:700px){
@@ -406,19 +420,42 @@ const DATA={
 "agi":{"regionName":"AGI未踏峰","tagline":"五合目から上は、まだ誰の地図にもない","description":"AI大陸の最北に聳える雪峰。標高は不明——そもそも何メートル登れば「AGI」なのか、麓の学者たちの定義論争が終わらないからだ。2024年頃からエージェントの隊列（computer use、自律コーディング）が一気に道を拓き、現在地の旗は五合目あたり。だが上空には「データの壁」なる雲がかかり、スケーリング限界を唱える者と「2027年に登頂」と叫ぶ者が同じ山小屋で口論中。頂のさらに先には超知能、マインドアップロード、不死の楼閣という蜃気楼。誰も頂を見たことがないのに、全員が登っている。","landmarks":[{"name":"ダートマス・ベースキャンプ跡","year":"1956","blurb":"「人工知能」という言葉が生まれた最初の幕営地。当時の隊は「優秀な研究者とひと夏あれば大きく前進できる」と見積もっていた。楽観の碑が今も残る。"},{"name":"カーツワイルの蜃気楼（特異点2045）","year":"2005","blurb":"レイ・カーツワイルが『The Singularity Is Near』で2045年のシンギュラリティを予言。頂の向こうに不死の楼閣が見えると言い張る古参ガイド。"},{"name":"ボストロムの警告板","year":"2014","blurb":"ニック・ボストロム『スーパーインテリジェンス』。頂上付近は制御を失うと戻れない雪崩地帯だと記した看板で、イーロン・マスクも「読んでおけ」と推薦した。"},{"name":"OpenAI登山口","year":"2015","blurb":"「AGIを全人類の利益に」と掲げて結成された登山隊の出発点。当初は非営利のテント村だったが、いまや巨大な資本装備を背負う大遠征隊になった。"},{"name":"エージェント尾根（computer use / Claude Code）","year":"2024","blurb":"2024年のcomputer use（AIが画面を直接操作）に続き、2025年にはClaude Codeのような自律コーディング隊が登場。現在の五合目はこの稜線の上にある。"},{"name":"データの壁（イリヤの断崖）","year":"2024","blurb":"NeurIPS 2024でイリヤ・サツケバーが宣言——「我々の知る事前学習は終わる。インターネットは一つしかない」。スケーリング直登ルートを塞ぐとされる断崖。"},{"name":"AI 2027 予言の岩","year":"2025","blurb":"元OpenAIのダニエル・ココタイロらが公開した詳細シナリオ。AIがAI研究を自動化する自己改善ループで2027年に頂へ達するという筋書きで、麓中が論争になった。"}],"funFact":"1956年の最初の登頂計画書いわく「優秀な10人と2ヶ月で大きく前進できる」。70年経った今もまだ五合目である。"}
 };
 const panel=document.getElementById('panel');
+function clampP(text){
+return '<p class="clampable clamped" onclick="this.classList.toggle(\'clamped\')" style="font-size:14px;line-height:1.75;color:#e6ebf5;margin:8px 0 0;">'+text+'</p><p class="morehint">▼ タップで全文／折りたたみ</p>';
+}
+function accRows(items,prefix){
+return items.map(function(l,i){return '<div class="accrow" id="'+prefix+i+'">'
++'<div class="acchead" onclick="this.parentNode.classList.toggle(\'open\')">'
++'<span style="font-family:Consolas,monospace;font-size:11px;color:#93a3c4;background:#1d2a42;padding:2px 6px;border-radius:6px;flex:none;min-width:44px;text-align:center;">'+l.year+'</span>'
++'<span style="font-size:13px;font-weight:600;">'+l.name+'</span>'
++'<span class="chev">▼</span></div>'
++'<div class="accbody">'+l.blurb+'</div></div>';}).join('');
+}
+function toggleBox(label,content){
+return '<div class="accrow"><div class="acchead" onclick="this.parentNode.classList.toggle(\'open\')">'
++'<span style="font-size:12px;color:#8fa3c8;">'+label+'</span><span class="chev">▼</span></div>'
++'<div class="accbody">'+content+'</div></div>';
+}
+function timeline(items,color,prefix){
+var html='<div class="tl"><div class="tlline"></div><span class="tlcap" style="left:0;">1950</span><span class="tlcap" style="right:0;">2030</span>';
+items.forEach(function(l,i){
+var y=parseInt(l.year); if(isNaN(y))y=1975;
+if(y<1950)y=1950; if(y>2030)y=2030;
+var left=2+(y-1950)/80*94;
+var top=13+(i%2)*9;
+html+='<div class="tldot" style="left:'+left+'%;top:'+top+'px;background:'+color+';" onclick="var r=document.getElementById(\''+prefix+i+'\');r.classList.add(\'open\');r.scrollIntoView({block:\'nearest\'});"></div>';
+});
+return html+'</div>';
+}
 function render(k){
 const d=DATA[k];
 panel.innerHTML='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;">'
 +'<span style="width:10px;height:10px;border-radius:50%;background:'+COLORS[k]+';flex:none;"></span>'
 +'<span style="font-size:18px;font-weight:600;">'+d.regionName+'</span>'
 +'<span style="font-size:13px;color:#93a3c4;">'+d.tagline+'</span></div>'
-+'<p style="font-size:14px;line-height:1.75;color:#e6ebf5;margin:8px 0 14px;">'+d.description+'</p>'
-+'<div style="display:flex;flex-direction:column;gap:10px;">'
-+d.landmarks.map(function(l){return '<div style="display:flex;gap:10px;align-items:flex-start;">'
-+'<span style="font-family:Consolas,monospace;font-size:11px;color:#93a3c4;background:#1d2a42;padding:2px 6px;border-radius:6px;flex:none;min-width:46px;text-align:center;">'+l.year+'</span>'
-+'<div><span style="font-size:14px;font-weight:600;">'+l.name+'</span>'
-+'<p style="font-size:13px;line-height:1.6;color:#93a3c4;margin:2px 0 0;">'+l.blurb+'</p></div></div>';}).join('')
-+'</div>'
++clampP(d.description)
++timeline(d.landmarks,COLORS[k],'lm')
++'<div>'+accRows(d.landmarks,'lm')+'</div>'
 +'<div style="margin-top:14px;border:1px solid #2a3a55;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.6;color:#b8c4dd;">'
 +'💡 '+d.funFact+'</div>';
 }
@@ -480,7 +517,7 @@ let h='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margi
 +'<span style="width:10px;height:10px;border-radius:50%;background:'+c+';flex:none;"></span>'
 +'<span style="font-size:18px;font-weight:600;">'+d.name+'</span>'
 +'<span style="font-size:13px;color:#93a3c4;">'+d.tagline+'</span></div>'
-+'<p style="font-size:14px;line-height:1.75;color:#e6ebf5;margin:8px 0 0;">'+d.body+'</p>';
++clampP(d.body);
 if(d.list){
 h+='<div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;">'
 +d.list.map(function(it){return '<div style="display:flex;gap:10px;align-items:baseline;">'
@@ -488,13 +525,13 @@ h+='<div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;">'
 +'<span style="font-size:13px;color:#93a3c4;">'+it.tagline+'</span></div>';}).join('')+'</div>';
 }
 if(d.milestones){
-h+='<div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;">'
-+d.milestones.map(function(m){return '<div style="display:flex;gap:10px;align-items:flex-start;">'
-+'<span style="font-family:Consolas,monospace;font-size:11px;color:#c4b5fd;background:#2a2450;padding:2px 6px;border-radius:6px;flex:none;">'+m.label+'</span>'
-+'<p style="font-size:13px;line-height:1.6;color:#93a3c4;margin:0;">'+m.desc+'</p></div>';}).join('')+'</div>';
+h+='<div style="margin-top:6px;">'+accRows(d.milestones.map(function(m){
+var sp=m.label.indexOf(' ');
+return {year:sp>0?m.label.slice(0,sp):m.label, name:sp>0?m.label.slice(sp+1):'', blurb:m.desc};
+}),'ms')+'</div>';
 }
-if(d.practice)h+=box2(PRACTICE_LABEL[CAT[k]],d.practice);
-if(d.example)h+=box2('実例',d.example);
+if(d.practice)h+=toggleBox(PRACTICE_LABEL[CAT[k]],d.practice);
+if(d.example)h+=toggleBox('実例',d.example);
 if(k==='horizon')h+='<div style="margin-top:12px;"><button onclick="document.querySelector(\'#tabs button[data-view=beyond]\').click()" style="font-size:13px;padding:6px 14px;background:#131c2e;color:#c4b5fd;border:1px solid #3c3470;border-radius:8px;cursor:pointer;font-family:inherit;">→ 水平線の彼方へ</button></div>';
 panel2.innerHTML=h;
 }
@@ -528,11 +565,9 @@ let h='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margi
 +'<span style="font-size:18px;font-weight:600;">'+d.name+'</span>'
 +'<span style="font-size:13px;color:#93a3c4;">'+d.tagline+'</span></div>'
 +'<span style="font-size:11px;color:#5f7396;display:block;margin:8px 0 2px;">シナリオ【推測】</span>'
-+'<p style="font-size:14px;line-height:1.75;color:#e6ebf5;margin:0;">'+d.body+'</p>'
-+'<div style="margin-top:12px;border:1px solid #2a3a55;border-radius:8px;padding:10px 12px;">'
-+'<span style="font-size:11px;color:#5f7396;display:block;margin-bottom:6px;">先行指標【事実】——現実で観測できる計器</span>'
-+d.signals.map(function(s){return '<p style="font-size:13px;line-height:1.6;color:#b8c4dd;margin:0 0 6px;">◆ '+s+'</p>';}).join('')
-+'</div>'
++clampP(d.body)
++'<div style="margin-top:6px;">'+toggleBox('先行指標【事実】 — 現実で観測できる計器 '+d.signals.length+'件',
+d.signals.map(function(s){return '<p style="margin:0 0 8px;">◆ '+s+'</p>';}).join(''))+'</div>'
 +'<div style="margin-top:10px;border:1px solid #3c3470;border-radius:8px;padding:10px 12px;">'
 +'<span style="font-size:11px;color:#7c6fb0;display:block;margin-bottom:3px;">未解決の問い</span>'
 +'<p style="font-size:13px;line-height:1.6;color:#c4b5fd;margin:0;">'+d.openQuestion+'</p></div>';
